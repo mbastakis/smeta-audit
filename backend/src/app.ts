@@ -28,11 +28,45 @@ export function createApp(): Express {
 
   // CORS - only in development web mode, not in Electron or production
   if (isDevelopment) {
+    // Support for GitHub Codespaces and other cloud IDEs
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:5173', // Vite default port
+      /https:\/\/.*\.github\.dev$/, // GitHub Codespaces
+      /https:\/\/.*\.githubpreview\.dev$/, // GitHub Codespaces preview
+      /https:\/\/.*\.app\.github\.dev$/, // GitHub Codespaces app
+    ];
+
+    // Add custom CORS_ORIGIN if provided
+    if (process.env.CORS_ORIGIN) {
+      allowedOrigins.push(process.env.CORS_ORIGIN);
+    }
+
     app.use(cors({
-      origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+      origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, Postman, curl)
+        if (!origin) return callback(null, true);
+        
+        // Check if origin matches any allowed pattern
+        const isAllowed = allowedOrigins.some(allowedOrigin => {
+          if (typeof allowedOrigin === 'string') {
+            return origin === allowedOrigin;
+          } else if (allowedOrigin instanceof RegExp) {
+            return allowedOrigin.test(origin);
+          }
+          return false;
+        });
+
+        if (isAllowed) {
+          callback(null, true);
+        } else {
+          console.warn('CORS blocked origin:', origin);
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
       credentials: true
     }));
-    console.log('✓ CORS enabled for development');
+    console.log('✓ CORS enabled for development (localhost + Codespaces)');
   } else {
     console.log('✓ CORS disabled (Electron or production mode)');
   }
