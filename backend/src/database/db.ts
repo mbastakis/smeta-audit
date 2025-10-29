@@ -32,6 +32,7 @@ export function initializeDatabase() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       filename TEXT NOT NULL,
       original_filename TEXT NOT NULL,
+      display_name TEXT,
       pillar TEXT NOT NULL CHECK(pillar IN ('pillar-1', 'pillar-2', 'pillar-3', 'pillar-4', 'kpis', 'capa')),
       category TEXT CHECK(category IN ('policies', 'procedures', 'forms', 'evidence') OR category IS NULL),
       file_type TEXT NOT NULL,
@@ -60,6 +61,16 @@ export function initializeDatabase() {
   `);
 
   console.log('✓ Documents table created');
+
+  // Migration: Add display_name column if it doesn't exist
+  const tableInfo = db.prepare('PRAGMA table_info(documents)').all() as Array<{ name: string }>;
+  const hasDisplayName = tableInfo.some(col => col.name === 'display_name');
+  
+  if (!hasDisplayName) {
+    console.log('Running migration: Adding display_name column to documents table...');
+    db.exec('ALTER TABLE documents ADD COLUMN display_name TEXT');
+    console.log('✓ Migration complete: display_name column added');
+  }
 
   // Create capas table
   db.exec(`
