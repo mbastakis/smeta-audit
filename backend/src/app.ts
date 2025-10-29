@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import healthRoutes from './routes/health.js';
 import documentRoutes from './routes/documents.js';
@@ -81,9 +82,31 @@ export function createApp(): Express {
   });
 
   // Serve PDF.js worker files (needed for both web and Electron)
-  const pdfjsDistPath = path.join(__dirname, '../../node_modules/pdfjs-dist/build');
+  // Try multiple possible locations for pdfjs-dist
+  const possiblePdfjsPaths = [
+    path.join(__dirname, '../../node_modules/pdfjs-dist/build'),           // Root node_modules (monorepo)
+    path.join(__dirname, '../../../node_modules/pdfjs-dist/build'),        // Parent directory
+    path.join(__dirname, '../../backend/node_modules/pdfjs-dist/build'),   // Backend node_modules
+  ];
+
+  let pdfjsDistPath = possiblePdfjsPaths[0]; // Default to first
+  for (const pdfjsPath of possiblePdfjsPaths) {
+    if (fs.existsSync(pdfjsPath)) {
+      pdfjsDistPath = pdfjsPath;
+      break;
+    }
+  }
+
   app.use('/pdfjs', express.static(pdfjsDistPath));
-  console.log('✓ PDF.js worker files served from /pdfjs');
+  console.log('✓ PDF.js worker files served from /pdfjs:', pdfjsDistPath);
+
+  // Serve uploaded files
+  const uploadsPath = path.join(__dirname, '../uploads');
+  if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+  }
+  app.use('/uploads', express.static(uploadsPath));
+  console.log('✓ Uploaded files served from /uploads:', uploadsPath);
 
   // API Routes
   app.use('/api', healthRoutes);
