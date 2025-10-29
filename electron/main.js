@@ -11,14 +11,24 @@ function startBackend() {
   return new Promise((resolve, reject) => {
     const serverPath = path.join(__dirname, '../backend/dist/server.js');
     
+    // Get Electron's user data directory for persistent storage
+    const userDataPath = app.getPath('userData');
+    const dbPath = path.join(userDataPath, 'smeta.db');
+    const uploadsPath = path.join(userDataPath, 'uploads');
+    
     console.log('Starting backend server from:', serverPath);
+    console.log('User data directory:', userDataPath);
+    console.log('Database location:', dbPath);
+    console.log('Uploads directory:', uploadsPath);
     
     serverProcess = spawn('node', [serverPath], {
       env: { 
         ...process.env, 
         NODE_ENV: 'production', 
         PORT: '5001',
-        ELECTRON: 'true' 
+        ELECTRON: 'true',
+        DB_PATH: dbPath,           // Persistent database location
+        UPLOAD_DIR: uploadsPath    // Persistent uploads location
       },
       stdio: 'inherit'
     });
