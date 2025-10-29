@@ -32,8 +32,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          npm ci --workspace=frontend
-          npm ci --workspace=backend
+          cd frontend && npm ci && cd ..
+          cd backend && npm ci && cd ..
       
       - name: Build frontend
         run: npm run build:frontend
@@ -81,8 +81,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          npm ci --workspace=frontend
-          npm ci --workspace=backend
+          cd frontend && npm ci && cd ..
+          cd backend && npm ci && cd ..
       
       - name: Build frontend
         run: npm run build:frontend
