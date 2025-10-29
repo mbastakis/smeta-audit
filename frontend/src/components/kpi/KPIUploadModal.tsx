@@ -30,13 +30,44 @@ interface KPIUploadModalProps {
   onUploadSuccess?: (item: KPIItem) => void;
 }
 
-const FILE_TYPE_OPTIONS: { value: KPIFileType; label: string; accept: string }[] = [
-  { value: 'pdf', label: 'PDF Document', accept: '.pdf' },
-  { value: 'xlsx', label: 'Excel Spreadsheet', accept: '.xlsx' },
-  { value: 'docx', label: 'Word Document', accept: '.docx' },
-  { value: 'jpg', label: 'JPEG Image', accept: '.jpg,.jpeg' },
-  { value: 'png', label: 'PNG Image', accept: '.png' },
-  { value: 'html-package', label: 'HTML Package (ZIP)', accept: '.zip' },
+const FILE_TYPE_OPTIONS: { 
+  value: KPIFileType; 
+  label: string; 
+  accept: Record<string, string[]>; 
+}[] = [
+  { 
+    value: 'pdf', 
+    label: 'PDF Document', 
+    accept: { 'application/pdf': ['.pdf'] } 
+  },
+  { 
+    value: 'xlsx', 
+    label: 'Excel Spreadsheet', 
+    accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'] } 
+  },
+  { 
+    value: 'docx', 
+    label: 'Word Document', 
+    accept: { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'] } 
+  },
+  { 
+    value: 'jpg', 
+    label: 'JPEG Image', 
+    accept: { 'image/jpeg': ['.jpg', '.jpeg'] } 
+  },
+  { 
+    value: 'png', 
+    label: 'PNG Image', 
+    accept: { 'image/png': ['.png'] } 
+  },
+  { 
+    value: 'html-package', 
+    label: 'HTML Package (ZIP)', 
+    accept: { 
+      'application/zip': ['.zip'],
+      'application/x-zip-compressed': ['.zip']
+    } 
+  },
 ];
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
@@ -55,10 +86,10 @@ export const KPIUploadModal: React.FC<KPIUploadModalProps> = ({
   const [uploadProgress, setUploadProgress] = useState(0);
   const { showSuccess, showError } = useNotification();
 
-  // Get accept string based on selected file type
-  const getAcceptString = () => {
+  // Get accept object based on selected file type
+  const getAcceptObject = () => {
     const option = FILE_TYPE_OPTIONS.find((opt) => opt.value === fileType);
-    return option?.accept || '*/*';
+    return option?.accept || { '*/*': [] };
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -83,10 +114,7 @@ export const KPIUploadModal: React.FC<KPIUploadModalProps> = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: getAcceptString().split(',').reduce((acc, ext) => {
-      acc[ext.trim()] = [];
-      return acc;
-    }, {} as Record<string, string[]>),
+    accept: getAcceptObject(),
     maxFiles: 1,
     multiple: false,
   });

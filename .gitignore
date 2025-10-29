@@ -60,7 +60,8 @@ sync-*.js
 
 # Test artifacts
 test-*.txt
-test-*.sh
+# Allow pipeline test script
+!test-pipeline-local.sh
 
 # Backend database (should be in data/)
 backend/database.db
