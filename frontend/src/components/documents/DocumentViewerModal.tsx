@@ -24,15 +24,16 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import type { Document as DocumentType } from '../../types/document';
 
+import { config } from '../../config';
+
 // Configure PDF.js worker - use backend-served worker file for Electron compatibility
 // Extract base URL without /api suffix for static file serving
 const getBaseUrl = () => {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-  return apiUrl.replace(/\/api$/, '');
+  return config.apiBaseUrl.replace(/\/api$/, '');
 };
 
 const BASE_URL = getBaseUrl();
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_URL = config.apiBaseUrl;
 pdfjs.GlobalWorkerOptions.workerSrc = `${BASE_URL}/pdfjs/pdf.worker.min.mjs`;
 
 interface DocumentViewerModalProps {

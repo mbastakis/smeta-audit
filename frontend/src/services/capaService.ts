@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { CAPA, CAPACreateRequest, CAPAUpdateRequest } from '../types/capa';
+import { config } from '../config';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_BASE = config.apiBaseUrl;
 
 export const capaService = {
   getAll: async (): Promise<CAPA[]> => {

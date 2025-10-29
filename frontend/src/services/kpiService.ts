@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { KPIItem, KPIUploadRequest, KPICategoryType } from '../types/kpi';
+import { config } from '../config';
 
-const API_BASE = 'http://localhost:5001/api/kpis';
+const API_BASE = `${config.apiBaseUrl}/kpis`;
 
 export const kpiService = {
   /**
