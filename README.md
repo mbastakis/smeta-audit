@@ -67,6 +67,8 @@ smeta-platform/
 
 ## Quick Start
 
+### Local Development
+
 ```bash
 # 1. Install dependencies
 npm install
@@ -76,6 +78,14 @@ npm run dev
 
 # 3. Open browser to http://localhost:3000
 ```
+
+### GitHub Codespaces
+
+Running in GitHub Codespaces? See **[Codespaces Setup Guide](docs/CODESPACES.md)** for detailed instructions on:
+- Setting up your Codespace environment
+- Port forwarding configuration
+- Troubleshooting CORS and network issues
+- Environment variables and customization
 
 ## Development Setup
 
@@ -101,17 +111,16 @@ The backend and frontend have `.env` files with sensible defaults. You can modif
 **Backend** (`backend/.env`):
 ```
 NODE_ENV=development
-PORT=5001
+PORT=5000
 DB_PATH=../data/smeta.db
 UPLOAD_DIR=./uploads
 CORS_ORIGIN=http://localhost:3000
 ```
 
-**Frontend** (`frontend/.env`):
-```
-VITE_API_URL=http://localhost:5001/api
-VITE_APP_NAME="SMETA Compliance Platform"
-```
+**Frontend** - Uses centralized configuration with Vite proxy:
+- API calls automatically proxied to backend via `/api` routes
+- Supports GitHub Codespaces and cloud IDEs out of the box
+- Custom backend URL via `VITE_BACKEND_URL` environment variable
 
 ### 3. Start Development Servers
 
@@ -123,7 +132,7 @@ npm run dev
 Or start them individually:
 
 ```bash
-# Start backend only (port 5001)
+# Start backend only (port 5000)
 npm run dev:backend
 
 # Start frontend only (port 3000)
@@ -133,8 +142,10 @@ npm run dev:frontend
 ### 4. Access the Application
 
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5001/api
-- **Health Check**: http://localhost:5001/api/health
+- **Backend API**: http://localhost:5000/api
+- **Health Check**: http://localhost:5000/api/health
+
+> **Note:** Running in GitHub Codespaces? See [docs/CODESPACES.md](docs/CODESPACES.md) for Codespaces-specific setup.
 
 ## Development Commands
 
@@ -250,10 +261,14 @@ npm run start
 
 ### Port Conflicts
 
-- **Backend**: Default port 5001
+- **Backend**: Default port 5000
 - **Frontend**: Default port 3000
 
 If ports are in use, kill the processes or change ports in `.env` files.
+
+### Network Errors in Codespaces
+
+If you see CORS or network errors in GitHub Codespaces, see [docs/CODESPACES.md](docs/CODESPACES.md) for detailed troubleshooting steps.
 
 ### Dependency Issues
 
