@@ -212,10 +212,34 @@ This creates:
 - `backend/dist/` - Compiled JavaScript from TypeScript
 - `frontend/dist/` - Optimized static assets (HTML, JS, CSS)
 
-### Running Production Build Locally
+### Running Production Build
+
+#### Quick Start (Recommended)
+
+Use the platform-specific startup scripts for production deployment:
+
+**Windows:**
+```bash
+# Double-click START_PLATFORM.bat
+# Or run from command line:
+START_PLATFORM.bat
+```
+
+**Mac/Linux:**
+```bash
+./start-platform.sh
+```
+
+These scripts will:
+1. Check if Node.js is installed
+2. Verify the backend is built (`backend/dist/server.js` exists)
+3. Start the production server on port 5001
+4. Automatically open your browser to http://localhost:5001
+
+#### Alternative: Manual Start
 
 ```bash
-# Run production builds
+# Run production builds manually
 npm run start
 ```
 
@@ -270,6 +294,30 @@ The SQLite database is created automatically on first backend startup at `data/s
 rm data/smeta.db
 npm run dev:backend  # Will recreate database
 ```
+
+## Test Data & Resources
+
+### Test Data
+The `test-data/` directory contains sample files for testing document upload functionality:
+- Sample KPI report zip file
+- HTML package examples
+
+### Resources
+The `resources/` directory contains Cretamel sample data for demonstration and testing:
+- Culture Insights reports (interactive HTML dashboards)
+- Climate surveys (multilingual)
+- SMETA evidence examples with placeholder documents organized by pillar
+  - Pillar 1: Labour Standards
+  - Pillar 2: Health & Safety
+  - Pillar 3: Environment
+  - Pillar 4: Business Ethics
+
+**Purpose:** These resources serve as:
+- Realistic test data for document upload and organization features
+- Examples for training and demonstrations
+- Templates for creating actual compliance documentation
+
+**Note:** All documents in `resources/` are placeholders and examples. Real compliance documents should be uploaded through the application interface.
 
 ## Database Schema
 
