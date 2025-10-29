@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test KPI Report</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Test KPI Dashboard Report</h1>
+            <p class="subtitle">Q4 2025 Performance Metrics</p>
+        </header>
+        
+        <section class="metrics">
+            <div class="metric-card">
+                <h2>Employee Satisfaction</h2>
+                <div class="score">87%</div>
+                <p>↑ 5% from Q3</p>
+            </div>
+            
+            <div class="metric-card">
+                <h2>Training Completion</h2>
+                <div class="score">92%</div>
+                <p>↑ 8% from Q3</p>
+            </div>
+            
+            <div class="metric-card">
+                <h2>Safety Incidents</h2>
+                <div class="score">3</div>
+                <p>↓ 2 from Q3</p>
+            </div>
+        </section>
+        
+        <section class="chart-section">
+            <h2>Interactive Chart</h2>
+            <canvas id="myChart"></canvas>
+            <button onclick="updateChart()">Refresh Data</button>
+        </section>
+        
+        <footer>
+            <p>Generated: <span id="timestamp"></span></p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

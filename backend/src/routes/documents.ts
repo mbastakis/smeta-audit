@@ -271,6 +271,30 @@ router.post('/upload', upload.single('file'), async (req: Request, res: Response
     }
 
     const { pillar, category } = req.body;
+    let { displayName } = req.body;
+
+    // Validate and sanitize display name
+    if (displayName !== undefined && displayName !== null && displayName !== '') {
+      displayName = displayName.trim();
+      
+      if (displayName.length === 0) {
+        displayName = null; // Treat empty string as null
+      } else if (displayName.length > 255) {
+        fs.unlinkSync(req.file.path);
+        return res.status(400).json({
+          error: 'Bad Request',
+          message: 'Display name must be 255 characters or less'
+        });
+      } else if (/[\/\\<>:"|?*\x00-\x1F]/.test(displayName)) {
+        fs.unlinkSync(req.file.path);
+        return res.status(400).json({
+          error: 'Bad Request',
+          message: 'Display name contains invalid characters (/, \\, <, >, :, ", |, ?, *)'
+        });
+      }
+    } else {
+      displayName = null;
+    }
 
     if (!pillar) {
       // Clean up uploaded file if validation fails
@@ -323,6 +347,7 @@ router.post('/upload', upload.single('file'), async (req: Request, res: Response
     const document = documentRepository.insertDocument({
       filename: req.file.filename,
       originalFilename: req.file.originalname,
+      displayName: displayName,
       pillar,
       category: category || null,
       fileType: req.file.mimetype,
@@ -335,6 +360,7 @@ router.post('/upload', upload.single('file'), async (req: Request, res: Response
       id: document.id,
       filename: document.filename,
       originalFilename: document.originalFilename,
+      displayName: document.displayName,
       pillar: document.pillar,
       category: document.category,
       fileType: document.fileType,

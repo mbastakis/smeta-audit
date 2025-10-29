@@ -11,6 +11,7 @@ import {
   MenuItem,
   Box,
   Typography,
+  TextField,
   CircularProgress,
   LinearProgress,
   Alert,
@@ -25,6 +26,8 @@ interface UploadModalProps {
   open: boolean;
   onClose: () => void;
   onUploadSuccess?: (document: Document) => void;
+  initialPillar?: string;
+  initialCategory?: string;
 }
 
 const PILLAR_OPTIONS = [
@@ -54,10 +57,18 @@ const ACCEPTED_FILE_TYPES = {
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 const LARGE_FILE_THRESHOLD = 5 * 1024 * 1024; // 5MB
 
-export const UploadModal: React.FC<UploadModalProps> = ({ open, onClose, onUploadSuccess }) => {
+export const UploadModal: React.FC<UploadModalProps> = ({ 
+  open, 
+  onClose, 
+  onUploadSuccess,
+  initialPillar = '',
+  initialCategory = '',
+}) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [pillar, setPillar] = useState('');
-  const [category, setCategory] = useState('');
+  const [pillar, setPillar] = useState(initialPillar);
+  const [category, setCategory] = useState(initialCategory);
+  const [displayName, setDisplayName] = useState('');
+  const [displayNameError, setDisplayNameError] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -130,11 +141,26 @@ export const UploadModal: React.FC<UploadModalProps> = ({ open, onClose, onUploa
     setUploading(true);
     setUploadProgress(0);
 
+    // Validate display name if provided
+    const trimmedDisplayName = displayName.trim();
+    if (trimmedDisplayName.length > 255) {
+      setDisplayNameError('Display name must be 255 characters or less');
+      setUploading(false);
+      return;
+    }
+    if (trimmedDisplayName && /[\/\\<>:"|?*\x00-\x1F]/.test(trimmedDisplayName)) {
+      setDisplayNameError('Display name contains invalid characters (/, \\, <, >, :, ", |, ?, *)');
+      setUploading(false);
+      return;
+    }
+    setDisplayNameError('');
+
     try {
       const document = await documentService.uploadDocument(
         selectedFile,
         pillar,
         showCategory ? category : undefined,
+        trimmedDisplayName || undefined,
         (percentage) => {
           setUploadProgress(percentage);
         }
@@ -176,13 +202,23 @@ export const UploadModal: React.FC<UploadModalProps> = ({ open, onClose, onUploa
   const handleClose = () => {
     // Reset state
     setSelectedFile(null);
-    setPillar('');
-    setCategory('');
+    setPillar(initialPillar);
+    setCategory(initialCategory);
+    setDisplayName('');
+    setDisplayNameError('');
     setUploading(false);
     setUploadProgress(0);
     setUploadedDocument(null);
     onClose();
   };
+
+  // Update pillar and category when modal opens with new initial values
+  React.useEffect(() => {
+    if (open) {
+      setPillar(initialPillar);
+      setCategory(initialCategory);
+    }
+  }, [open, initialPillar, initialCategory]);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -280,6 +316,25 @@ export const UploadModal: React.FC<UploadModalProps> = ({ open, onClose, onUploa
                   </Select>
                 </FormControl>
               )}
+
+              {/* Display Name (Optional) */}
+              <TextField
+                fullWidth
+                label="Display Name (Optional)"
+                value={displayName}
+                onChange={(e) => {
+                  setDisplayName(e.target.value);
+                  setDisplayNameError('');
+                }}
+                disabled={uploading}
+                error={!!displayNameError}
+                helperText={
+                  displayNameError || 
+                  `Leave empty to use filename without extension (${displayName.length}/255)`
+                }
+                sx={{ marginBottom: 2 }}
+                placeholder="e.g., Q4 Safety Report"
+              />
             </>
           )}
 

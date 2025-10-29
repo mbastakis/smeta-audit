@@ -43,3 +43,25 @@ coverage/
 # Temporary files
 tmp/
 temp/
+
+# ========================================
+# Story 3.2: Cleanup Patterns
+# ========================================
+
+# Electron build artifacts
+.electron-temp/
+*-electron-*.sh
+electron-frontend.env
+
+# Temporary debugging scripts
+*-fix.js
+*-fix.sh
+sync-*.js
+
+# Test artifacts
+test-*.txt
+test-*.sh
+
+# Backend database (should be in data/)
+backend/database.db
+backend/*.db

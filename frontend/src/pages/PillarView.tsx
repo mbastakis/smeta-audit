@@ -23,18 +23,22 @@ import {
   DialogContentText,
   DialogActions,
   Skeleton,
+  Alert,
 } from '@mui/material';
 import {
   Visibility as VisibilityIcon,
   Delete as DeleteIcon,
   FolderOpen as FolderOpenIcon,
-  Description as DescriptionIcon,
   Home as HomeIcon,
+  Refresh as RefreshIcon,
 } from '@mui/icons-material';
 import { documentService } from '../services/documentService';
 import type { Document } from '../types/document';
-import { formatFileSize, formatDate, getFileIconColor } from '../utils/formatters';
+import { formatFileSize, formatDate } from '../utils/formatters';
+import { getDisplayName, getDocumentIcon } from '../utils/documentDisplay';
 import { DocumentViewerModal } from '../components/documents/DocumentViewerModal';
+import { UploadModal } from '../components/documents/UploadModal';
+import { useNotification } from '../contexts/NotificationContext';
 
 const PILLAR_NAMES: Record<string, string> = {
   'pillar-1': 'Pillar 1: Labour Standards',
@@ -48,14 +52,17 @@ const CATEGORIES = ['policies', 'procedures', 'forms', 'evidence'];
 export const PillarView: React.FC = () => {
   const { pillarId } = useParams<{ pillarId: string }>();
   const navigate = useNavigate();
+  const { showSuccess, showError } = useNotification();
   
   const [currentTab, setCurrentTab] = useState(0);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState<Document | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [documentToView, setDocumentToView] = useState<Document | null>(null);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
   
   const currentCategory = CATEGORIES[currentTab];
   const pillarName = pillarId ? PILLAR_NAMES[pillarId] : '';
@@ -71,11 +78,14 @@ export const PillarView: React.FC = () => {
     if (!pillarId) return;
     
     setLoading(true);
+    setError(null);
     try {
       const docs = await documentService.getDocumentsByPillarAndCategory(pillarId, currentCategory);
       setDocuments(docs);
-    } catch (error) {
-      console.error('Failed to fetch documents:', error);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load documents';
+      setError(errorMessage);
+      showError(errorMessage);
       setDocuments([]);
     } finally {
       setLoading(false);
@@ -113,17 +123,32 @@ export const PillarView: React.FC = () => {
       await documentService.deleteDocument(documentToDelete.id);
       setDeleteDialogOpen(false);
       setDocumentToDelete(null);
+      showSuccess('Document deleted successfully');
       // Refresh document list
       fetchDocuments();
-    } catch (error) {
-      console.error('Failed to delete document:', error);
-      alert('Failed to delete document. Please try again.');
+    } catch (err) {
+      console.error('Failed to delete document:', err);
+      showError('Failed to delete document. Please try again.');
     }
   };
 
   const handleDeleteCancel = () => {
     setDeleteDialogOpen(false);
     setDocumentToDelete(null);
+  };
+
+  const handleUploadClick = () => {
+    setUploadModalOpen(true);
+  };
+
+  const handleUploadClose = () => {
+    setUploadModalOpen(false);
+  };
+
+  const handleUploadSuccess = () => {
+    setUploadModalOpen(false);
+    // Refresh document list
+    fetchDocuments();
   };
 
   // Loading skeleton
@@ -188,8 +213,28 @@ export const PillarView: React.FC = () => {
         ))}
       </Tabs>
 
+      {/* Error State with Retry */}
+      {error && (
+        <Alert 
+          severity="error" 
+          sx={{ mb: 3 }}
+          action={
+            <Button 
+              color="inherit" 
+              size="small" 
+              onClick={fetchDocuments}
+              startIcon={<RefreshIcon />}
+            >
+              Retry
+            </Button>
+          }
+        >
+          {error}
+        </Alert>
+      )}
+
       {/* Document List or Empty State */}
-      {documents.length === 0 && !loading ? (
+      {documents.length === 0 && !loading && !error ? (
         <Box
           sx={{
             display: 'flex',
@@ -207,11 +252,11 @@ export const PillarView: React.FC = () => {
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Click Upload to add documents to this category
           </Typography>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={handleUploadClick}>
             Upload Document
           </Button>
         </Box>
-      ) : (
+      ) : !error ? (
         <>
           <TableContainer component={Paper}>
             <Table>
@@ -232,16 +277,13 @@ export const PillarView: React.FC = () => {
                     sx={{ '&:hover': { backgroundColor: '#f5f5f5' } }}
                   >
                     <TableCell>
-                      <DescriptionIcon
-                        sx={{
-                          fontSize: 24,
-                          color: getFileIconColor(document.fileType),
-                        }}
-                      />
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        {getDocumentIcon(document)}
+                      </Box>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body1" noWrap sx={{ maxWidth: 400 }}>
-                        {document.originalFilename}
+                        {getDisplayName(document)}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -285,14 +327,14 @@ export const PillarView: React.FC = () => {
             </Typography>
           </Box>
         </>
-      )}
+      ) : null}
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
         <DialogTitle>Delete Document</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete "{documentToDelete?.originalFilename}"? This action cannot be undone.
+            Are you sure you want to delete "{documentToDelete ? getDisplayName(documentToDelete) : ''}"? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -308,6 +350,15 @@ export const PillarView: React.FC = () => {
         open={viewerOpen}
         document={documentToView}
         onClose={handleViewerClose}
+      />
+
+      {/* Upload Modal */}
+      <UploadModal
+        open={uploadModalOpen}
+        onClose={handleUploadClose}
+        onUploadSuccess={handleUploadSuccess}
+        initialPillar={pillarId || ''}
+        initialCategory={currentCategory}
       />
     </Container>
   );

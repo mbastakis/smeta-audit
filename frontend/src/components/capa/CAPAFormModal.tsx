@@ -89,8 +89,9 @@ export const CAPAFormModal: React.FC<CAPAFormModalProps> = ({
       setPreventiveAction(existingCapa.preventiveAction || '');
       setHasUnsavedChanges(false);
     } else if (!existingCapa && open) {
-      // Reset form for create mode
+      // Reset form for create mode with CAPA ID prefix
       resetForm();
+      setCapaId('CAPA-');
     }
   }, [existingCapa, open]);
 
@@ -159,16 +160,16 @@ export const CAPAFormModal: React.FC<CAPAFormModalProps> = ({
       setSnackbarMessage('CAPA saved successfully');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      setHasUnsavedChanges(false);
 
       // Call success callback
       if (onSuccess) {
         onSuccess(savedCapa);
       }
 
-      // Close modal after short delay
+      // Close modal after short delay (force close without confirmation)
       setTimeout(() => {
-        handleClose();
+        resetForm();
+        onClose();
       }, 500);
     } catch (error: any) {
       console.error('Save CAPA error:', error);

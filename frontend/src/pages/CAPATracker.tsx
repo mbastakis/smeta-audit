@@ -28,15 +28,19 @@ import {
   DialogActions,
   Skeleton,
   SelectChangeEvent,
+  Alert,
 } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { capaService } from '../services/capaService';
 import type { CAPA } from '../types/capa';
 import { formatDate } from '../utils/formatters';
+import { CAPAFormModal } from '../components/capa/CAPAFormModal';
+import { useNotification } from '../contexts/NotificationContext';
 
 type FilterStatus = 'all' | 'open' | 'in-progress' | 'closed';
 type SortBy = 'dueDate' | 'status' | 'severity';
@@ -53,13 +57,17 @@ const STATUS_ORDER = { open: 1, 'in-progress': 2, closed: 3 };
 
 export const CAPATracker: React.FC = () => {
   const navigate = useNavigate();
+  const { showSuccess, showError } = useNotification();
   const [capas, setCapas] = useState<CAPA[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [sortBy, setSortBy] = useState<SortBy>('dueDate');
   const [selectedCapa, setSelectedCapa] = useState<CAPA | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [capaToDelete, setCapaToDelete] = useState<CAPA | null>(null);
+  const [formModalOpen, setFormModalOpen] = useState(false);
+  const [editingCapa, setEditingCapa] = useState<CAPA | null>(null);
 
   useEffect(() => {
     fetchCapas();
@@ -67,6 +75,7 @@ export const CAPATracker: React.FC = () => {
 
   const fetchCapas = async () => {
     setLoading(true);
+    setError(null);
     try {
       let data: CAPA[];
       if (filterStatus === 'all') {
@@ -79,8 +88,10 @@ export const CAPATracker: React.FC = () => {
       if (data.length > 0 && !selectedCapa) {
         setSelectedCapa(data[0]);
       }
-    } catch (error) {
-      console.error('Failed to fetch CAPAs:', error);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load CAPAs';
+      setError(errorMessage);
+      showError(errorMessage);
       setCapas([]);
     } finally {
       setLoading(false);
@@ -103,13 +114,20 @@ export const CAPATracker: React.FC = () => {
   };
 
   const handleAddCapa = () => {
-    // TODO: Story 2.5 - Open create modal
-    console.log('Add CAPA - Story 2.5');
+    setEditingCapa(null);
+    setFormModalOpen(true);
   };
 
   const handleEditCapa = () => {
-    // TODO: Story 2.5 - Open edit modal
-    console.log('Edit CAPA - Story 2.5');
+    setEditingCapa(selectedCapa);
+    setFormModalOpen(true);
+  };
+
+  const handleFormSuccess = (capa: CAPA) => {
+    setFormModalOpen(false);
+    showSuccess(editingCapa ? 'CAPA updated successfully' : 'CAPA created successfully');
+    fetchCapas(); // Refresh list
+    setSelectedCapa(capa); // Select new/updated CAPA
   };
 
   const handleDeleteClick = (capa: CAPA) => {
@@ -124,15 +142,16 @@ export const CAPATracker: React.FC = () => {
       await capaService.delete(capaToDelete.id);
       setDeleteDialogOpen(false);
       setCapaToDelete(null);
+      showSuccess('CAPA deleted successfully');
       // If deleted CAPA was selected, clear selection
       if (selectedCapa?.id === capaToDelete.id) {
         setSelectedCapa(null);
       }
       // Refresh list
       fetchCapas();
-    } catch (error) {
-      console.error('Failed to delete CAPA:', error);
-      alert('Failed to delete CAPA. Please try again.');
+    } catch (err) {
+      console.error('Failed to delete CAPA:', err);
+      showError('Failed to delete CAPA. Please try again.');
     }
   };
 
@@ -247,6 +266,26 @@ export const CAPATracker: React.FC = () => {
           </Select>
         </FormControl>
       </Box>
+
+      {/* Error State with Retry */}
+      {error && (
+        <Alert 
+          severity="error" 
+          sx={{ mb: 3 }}
+          action={
+            <Button 
+              color="inherit" 
+              size="small" 
+              onClick={fetchCapas}
+              startIcon={<RefreshIcon />}
+            >
+              Retry
+            </Button>
+          }
+        >
+          {error}
+        </Alert>
+      )}
 
       {/* Two-Column Layout */}
       {loading ? (
@@ -509,6 +548,14 @@ export const CAPATracker: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* CAPA Form Modal */}
+      <CAPAFormModal
+        open={formModalOpen}
+        onClose={() => setFormModalOpen(false)}
+        onSuccess={handleFormSuccess}
+        existingCapa={editingCapa}
+      />
     </Container>
   );
 };

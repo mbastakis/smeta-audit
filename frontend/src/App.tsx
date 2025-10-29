@@ -7,7 +7,10 @@ import { Dashboard } from './pages/Dashboard';
 import { PillarView } from './pages/PillarView';
 import { SearchResults } from './pages/SearchResults';
 import { CAPATracker } from './pages/CAPATracker';
+import { KPIDashboard } from './pages/KPIDashboard';
+import { KPICategoryView } from './pages/KPICategoryView';
 import { UploadModal } from './components/documents/UploadModal';
+import { NotificationProvider } from './contexts/NotificationContext';
 
 function App() {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -26,36 +29,38 @@ function App() {
   };
 
   return (
-    <Router>
-      <Box 
-        sx={{ 
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh', 
-          bgcolor: 'background.default' 
-        }}
-      >
-        <AppBar onUploadClick={handleUploadClick} />
-        <Box component="main" sx={{ flexGrow: 1, pb: 3 }}>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/pillar/:pillarId" element={<PillarView />} />
-            <Route path="/search" element={<SearchResults />} />
-            <Route path="/capa" element={<CAPATracker />} />
-            {/* Placeholder routes - will be implemented in later stories */}
-            <Route path="/kpis" element={<Dashboard />} />
-          </Routes>
+    <NotificationProvider>
+      <Router>
+        <Box 
+          sx={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh', 
+            bgcolor: 'background.default' 
+          }}
+        >
+          <AppBar onUploadClick={handleUploadClick} />
+          <Box component="main" sx={{ flexGrow: 1, pb: 3 }}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/pillar/:pillarId" element={<PillarView />} />
+              <Route path="/search" element={<SearchResults />} />
+              <Route path="/capa" element={<CAPATracker />} />
+              <Route path="/kpis" element={<KPIDashboard />} />
+              <Route path="/kpis/:category" element={<KPICategoryView />} />
+            </Routes>
+          </Box>
+          <Footer />
+          
+          {/* Upload Modal */}
+          <UploadModal
+            open={uploadModalOpen}
+            onClose={handleUploadClose}
+            onUploadSuccess={handleUploadSuccess}
+          />
         </Box>
-        <Footer />
-        
-        {/* Upload Modal */}
-        <UploadModal
-          open={uploadModalOpen}
-          onClose={handleUploadClose}
-          onUploadSuccess={handleUploadSuccess}
-        />
-      </Box>
-    </Router>
+      </Router>
+    </NotificationProvider>
   );
 }
 

@@ -1,0 +1,234 @@
+
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cretamel · Ανάλυση Εργασιακού Κλίματος 2025</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <h1>🧭 Ανάλυση Εργασιακού Κλίματος — Cretamel® 2025</h1>
+      <div class="subtitle">Culture & Behaviour Insights Report (SMETA Pillar 1 – Labour Standards)</div>
+    </div>
+    <div class="brandbar container">
+      <img src="assets/logo.png" alt="Cretamel" style="height:42px"/>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="ribbon">SMETA 4‑Pillar · 2025</div>
+        <a class="btn ghost" href="Cretamel_Culture_Insights_Report_2025.pdf" target="_blank">📄 Download PDF Report</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Filters & KPIs -->
+    <section class="row">
+      <div class="card">
+        <h3>Φίλτρα & KPIs</h3>
+        <div class="filters">
+          <div>
+            <div class="small">Τμήμα / Υπηρεσία</div>
+            <select id="dept" class="select"></select>
+          </div>
+          <div>
+            <div class="small">Έτη Υπηρεσίας</div>
+            <select id="exp" class="select"></select>
+          </div>
+        </div>
+        <div class="legend section">
+          <span class="badge">Εξωστρέφεια–Εσωστρέφεια</span>
+          <span class="badge">Πραγματισμός–Διαισθητικότητα</span>
+          <span class="badge">Λογική–Συναισθηματισμός</span>
+          <span class="badge">Δομή–Ευελιξία</span>
+        </div>
+        <div class="kpis" id="kpis"></div>
+      </div>
+      <div class="card">
+        <h3>Μέσος Όρος Εταιρείας</h3>
+        <div id="overall" class="section"></div>
+        <hr>
+        <div class="small">by Marvi Koukounaraki · Respect · Safety · Growth</div>
+      </div>
+    </section>
+
+    <!-- Department comparison -->
+    <section class="card">
+      <h3>Σύγκριση Τμημάτων (Μέσοι Όροι %)</h3>
+      <div id="deptCompare"></div>
+    </section>
+
+    <!-- Full Climate Analysis Text -->
+    <section class="card">
+      <h3>Ανάλυση ανά Ενότητα</h3>
+
+      <h4>🔹 1. Εξωστρέφεια – Εσωστρέφεια (Μέσος Όρος 70 %)</h4>
+      <p>Οι εργαζόμενοι δηλώνουν σχετικά χαμηλή εξωστρέφεια, στοιχείο που δείχνει προτίμηση σε σταθερό και οικείο πλαίσιο επικοινωνίας. Η διάθεση για συνεργασία είναι υπαρκτή, αλλά η ενεργητική συμμετοχή και η δημόσια έκφραση ιδεών περιορισμένη.</p>
+      <b>Τι σημαίνει:</b>
+      <ul>
+        <li>Υπάρχει επικοινωνία, αλλά κυρίως εντός μικρών ομάδων.</li>
+        <li>Οι εργαζόμενοι διστάζουν να «εκτεθούν» ή να προτείνουν αλλαγές δημόσια.</li>
+        <li>Το περιβάλλον είναι ευγενικό και συγκρατημένο, όχι εξωστρεφές.</li>
+      </ul>
+      <b>Ερμηνεία για το κλίμα:</b>
+      <blockquote>Η χαμηλή εξωστρέφεια συνδέεται με συγκρατημένη εκδήλωση ενθουσιασμού και πρωτοβουλιών. Δεν υπάρχει απαραίτητα απάθεια, αλλά προτίμηση στην ασφάλεια και αποφυγή ρίσκου.</blockquote>
+
+      <h4>🔹 2. Πραγματισμός – Διαισθητικότητα (Μέσος Όρος 70 %)</h4>
+      <p>Το προσωπικό λειτουργεί πρακτικά και μεθοδικά, επιλέγοντας αποδεδειγμένες μεθόδους έναντι της δημιουργικής προσέγγισης. Ο βαθμός καινοτομίας είναι χαμηλός, καθώς προτιμάται η ασφάλεια του «γνωστού τρόπου».</p>
+      <b>Τι σημαίνει:</b>
+      <ul>
+        <li>Επικράτηση πρακτικού, οργανωτικού τρόπου σκέψης.</li>
+        <li>Περιορισμένη πρωτοβουλία για δοκιμή νέων ιδεών.</li>
+        <li>Προτίμηση για ξεκάθαρες οδηγίες και βήματα.</li>
+      </ul>
+      <b>Ερμηνεία για το κλίμα:</b>
+      <blockquote>Ο πραγματισμός, σε συνδυασμό με τη χαμηλή εξωστρέφεια, εξηγεί την έλλειψη ενθουσιασμού και καινοτομίας. Δημιουργείται περιβάλλον υπευθυνότητας και συνέπειας, αλλά όχι πειραματισμού.</blockquote>
+
+      <h4>🔹 3. Λογική – Συναισθηματισμός (Μέσος Όρος 89 %)</h4>
+      <p>Η πιο δυνατή διάσταση της εταιρείας. Οι εργαζόμενοι επιδεικνύουν ισχυρό αίσθημα δικαιοσύνης, ενσυναίσθησης και συνεργασίας. Η επικοινωνία χαρακτηρίζεται από ευγένεια και σεβασμό.</p>
+      <b>Τι σημαίνει:</b>
+      <ul>
+        <li>Κυριαρχεί η αίσθηση «να είναι σωστό και δίκαιο».</li>
+        <li>Υπάρχει ωριμότητα και ισορροπία στις διαπροσωπικές σχέσεις.</li>
+        <li>Το περιβάλλον είναι σταθερό, χωρίς συγκρούσεις.</li>
+      </ul>
+      <b>Ερμηνεία για το κλίμα:</b>
+      <blockquote>Αυτή η ισχυρή ηθική κουλτούρα λειτουργεί προστατευτικά για τη συνοχή, αλλά μπορεί να ενισχύει την απόσταση από τη διοίκηση, αφού οι εργαζόμενοι αποφεύγουν να εκφράζουν διαφωνίες ή κριτική.</blockquote>
+
+      <h4>🔹 4. Δομή – Ευελιξία (Μέσος Όρος 86 %)</h4>
+      <p>Υπάρχει σαφής προτίμηση στη δομή, τους κανόνες και την οργάνωση. Οι εργαζόμενοι αισθάνονται ασφάλεια όταν υπάρχουν καθαρά όρια, διαδικασίες και καθοδήγηση.</p>
+      <b>Τι σημαίνει:</b>
+      <ul>
+        <li>Οι οδηγίες και τα πρωτόκολλα εκτιμώνται.</li>
+        <li>Η ευελιξία προκαλεί ανασφάλεια.</li>
+        <li>Οι εργαζόμενοι προτιμούν να καθοδηγούνται παρά να αυτονομούνται.</li>
+      </ul>
+      <b>Ερμηνεία για το κλίμα:</b>
+      <blockquote>Η ανάγκη για δομή και σταθερότητα ενισχύει τον συγκεντρωτισμό. Δημιουργεί αίσθηση απόστασης από τη διοίκηση, όχι λόγω δυσφορίας, αλλά λόγω ιεραρχικού σεβασμού και συνήθειας εξάρτησης από οδηγίες.</blockquote>
+    </section>
+
+    <!-- Meta Insights -->
+    <section class="card">
+      <h3>📊 Συνδυαστική Ανάλυση (Meta-Insights)</h3>
+      <table class="table">
+        <thead>
+          <tr><th>Παράμετρος</th><th>Ενότητα που την αντικατοπτρίζει</th><th>Ερμηνεία</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Έλλειψη ενθουσιασμού & πρωτοβουλιών</td><td>Εξωστρέφεια & Πραγματισμός</td><td>Το προσωπικό είναι αξιόπιστο, αλλά όχι εκφραστικό ή καινοτόμο.</td></tr>
+          <tr><td>Απόσταση από τη Διοίκηση</td><td>Λογική & Εξωστρέφεια</td><td>Υπάρχει σεβασμός, όχι ανοιχτή επικοινωνία ή feedback 360°.</td></tr>
+          <tr><td>Συγκεντρωτισμός & ανάγκη καθοδήγησης</td><td>Δομή – Ευελιξία</td><td>Οι εργαζόμενοι προτιμούν σαφείς κανόνες και οδηγίες.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Overall Profile -->
+    <section class="card">
+      <h3>🟣 Συνολικό Προφίλ Cretamel 2025</h3>
+      <ul>
+        <li>Η κουλτούρα της Cretamel χαρακτηρίζεται από <b>σταθερότητα, υπευθυνότητα και επαγγελματισμό</b>.</li>
+        <li>Οι εργαζόμενοι αποδίδουν καλύτερα σε πλαίσια με <b>σαφείς ρόλους, κανόνες και καθοδήγηση</b>.</li>
+        <li>Το περιβάλλον είναι <b>ασφαλές, δίκαιο και συνεργατικό</b>, αλλά χρειάζεται: μεγαλύτερη εξωστρέφεια, ενίσχυση πρωτοβουλιών, περισσότερη οριζόντια επικοινωνία.</li>
+      </ul>
+    </section>
+
+    <!-- Action Plan -->
+    <section class="card">
+      <h3>🟩 Πλάνο Ενεργειών 2026 — “From Stability to Engagement”</h3>
+      <table class="table">
+        <thead>
+          <tr><th>Στόχος</th><th>Ενέργεια</th><th>Καλές Πρακτικές</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1. Ενίσχυση Επικοινωνίας & Εμπιστοσύνης</td><td>Τριμηνιαίες συνεδρίες “Open Dialogue Days” όπου οι εργαζόμενοι θέτουν προτάσεις στη Διοίκηση.</td><td>Coca-Cola HBC</td></tr>
+          <tr><td>2. Ενεργοποίηση Πρωτοβουλιών & Ιδεών</td><td>“Idea Challenge Week” – εβδομάδα συλλογής προτάσεων βελτίωσης με αναγνώριση.</td><td>Unilever / Barilla</td></tr>
+          <tr><td>3. Ανάπτυξη Δεξιοτήτων & Αυτονομίας</td><td>Micro-learning modules (10-15’) σε leadership & innovation.</td><td>“Cretamel LearnHub”</td></tr>
+          <tr><td>4. Εκπαίδευση Προϊσταμένων σε Coaching Skills</td><td>Πρόγραμμα “Lead with Respect”.</td><td>Nestlé</td></tr>
+          <tr><td>5. Ενδυνάμωση Ευελιξίας & Συμμετοχής</td><td>Cross-functional Task Forces για sustainability / wellbeing.</td><td>IKEA / Mondelez</td></tr>
+          <tr><td>6. Επανεξέταση Καναλιών Επικοινωνίας με Διοίκηση</td><td>Δημιουργία “MyVoice Portal” για ιδέες & feedback με status tracking.</td><td>Best Practice Portal</td></tr>
+          <tr><td>7. Καλλιέργεια Ενθουσιασμού & Ομαδικής Ταυτότητας</td><td>Ετήσιο “Cretamel Day” με workshops, παρουσίαση επιτευγμάτων & βραβεία.</td><td>Danone / Ferrero</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Benefits -->
+    <section class="card">
+      <h3>🔚 Αναμενόμενα Οφέλη</h3>
+      <ul>
+        <li>Ενίσχυση εμπιστοσύνης και εσωτερικής επικοινωνίας.</li>
+        <li>Δημιουργία κουλτούρας συμμετοχής και αναγνώρισης.</li>
+        <li>Ανάπτυξη πρωτοβουλίας και δημιουργικότητας χωρίς απώλεια ελέγχου.</li>
+        <li>Εναρμόνιση με τις αρχές SMETA Pillars 1 & 4 — <b>Respect · Safety · Growth</b>.</li>
+      </ul>
+    </section>
+
+    <section class="footer">
+      © 2025 Cretamel — Culture Insights Dashboard
+    </section>
+  </main>
+
+  <script>
+    async function loadData(){
+      try {
+        const res = await fetch('data.json');
+        const data = await res.json();
+
+        // Overall
+        const overallEl = document.getElementById('overall');
+        overallEl.innerHTML = Object.entries(data.overall).map(([k,v]) => `
+          <div class="barrow"><div class="small">${k}</div><div class="small"><b>${v}%</b></div></div>
+          <div class="bar"><span style="width:${v}%"></span></div>
+        `).join('');
+
+        // Filters
+        const deptSel = document.getElementById('dept');
+        const expSel = document.getElementById('exp');
+        const depts = Object.keys(data.byDepartmentExperience || {});
+        depts.forEach(d=>{ const o=document.createElement('option'); o.value=d; o.textContent=d; deptSel.appendChild(o); });
+        function fillExp(){
+          expSel.innerHTML='';
+          const exps = Object.keys(data.byDepartmentExperience[deptSel.value] || {});
+          exps.forEach(e=>{ const o=document.createElement('option'); o.value=e; o.textContent=e; expSel.appendChild(o); });
+        }
+        deptSel.addEventListener('change', ()=>{ fillExp(); renderKPIs(); });
+        expSel.addEventListener('change', renderKPIs);
+        if(depts.length){ deptSel.value = depts[0]; fillExp(); }
+
+        // KPIs
+        function renderKPIs(){
+          const kpis = document.getElementById('kpis');
+          if(!deptSel.value || !expSel.value) { kpis.innerHTML=''; return; }
+          const obj = (data.byDepartmentExperience[deptSel.value] || {})[expSel.value] || {};
+          kpis.innerHTML = Object.entries(obj).map(([k,v])=>`
+            <div class="kpi">
+              <div class="label">${k}</div>
+              <div class="value">${v}%</div>
+              <div class="bar"><span style="width:${v}%"></span></div>
+            </div>
+          `).join('');
+        }
+        renderKPIs();
+
+        // Department comparison
+        const dc = document.getElementById('deptCompare');
+        const metrics = ["Εξωστρέφεια–Εσωστρέφεια","Πραγματισμός–Διαισθητικότητα","Λογική–Συναισθηματισμός","Δομή–Ευελιξία"];
+        dc.innerHTML = metrics.map(m=>{
+          const rows = depts.map(d=>{
+            const val = (data.byDepartment[d] || {})[m];
+            const pct = (typeof val === 'number') ? val : 0;
+            return `<div class="barrow"><div>${d}</div><div class="small"><b>${pct}%</b></div></div>
+                    <div class="bar"><span style="width:${pct}%"></span></div>`;
+          }).join('');
+          return `<div class="section"><div class="small"><b>${m}</b></div>${rows}</div>`;
+        }).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    loadData();
+  </script>
+</body>
+</html>

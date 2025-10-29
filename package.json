@@ -2,18 +2,155 @@
   "name": "smeta-platform",
   "version": "1.0.0",
   "description": "SMETA Compliance Platform - Document Management and CAPA Tracking",
+  "main": "electron/main.js",
+  "author": "SMETA Compliance Team",
+  "license": "MIT",
   "private": true,
   "workspaces": [
     "frontend",
     "backend"
   ],
   "scripts": {
+    "preinstall": "node -e \"console.log('Installing SMETA Platform dependencies...')\"",
+    "install:all": "npm install && npm install --workspace=frontend && npm install --workspace=backend",
+    "postinstall": "node -e \"console.log('\\n✓ Dependencies installed successfully!\\n\\nTo start development:\\n  npm run dev\\n\\nTo build for production:\\n  npm run build\\n')\"",
     "dev": "npm-run-all --parallel dev:backend dev:frontend",
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
-    "install:all": "npm install && npm install --workspace=frontend && npm install --workspace=backend"
+    "build": "npm-run-all build:backend build:frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "start": "npm-run-all --parallel start:backend start:frontend",
+    "start:backend": "npm run start --workspace=backend",
+    "start:frontend": "npm run preview --workspace=frontend",
+    "electron": "electron .",
+    "electron:dev": "NODE_ENV=development electron .",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:all": "npm run build && electron-builder -mwl",
+    "test": "npm run test --workspace=frontend",
+    "test:watch": "npm run test:watch --workspace=frontend",
+    "clean": "npm-run-all clean:backend clean:frontend clean:electron clean:root",
+    "clean:backend": "cd backend && rm -rf node_modules dist",
+    "clean:frontend": "cd frontend && rm -rf node_modules dist",
+    "clean:electron": "rm -rf dist-electron",
+    "clean:root": "rm -rf node_modules",
+    "reset": "npm-run-all clean install:all",
+    "check": "npm-run-all check:backend check:frontend",
+    "check:backend": "cd backend && tsc --noEmit",
+    "check:frontend": "cd frontend && tsc --noEmit"
+  },
+  "build": {
+    "appId": "com.smeta.compliance.platform",
+    "productName": "SMETA Compliance Platform",
+    "directories": {
+      "output": "dist-electron",
+      "buildResources": "electron/icons"
+    },
+    "files": [
+      "electron/**/*",
+      "frontend/dist/**/*",
+      "backend/dist/**/*",
+      "backend/node_modules/**/*",
+      "data/**/*",
+      "!backend/src/**/*",
+      "!frontend/src/**/*",
+      "!frontend/node_modules/**/*",
+      "!**/*.map"
+    ],
+    "extraResources": [
+      {
+        "from": "data",
+        "to": "data",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.business",
+      "icon": "electron/icons/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "title": "SMETA Compliance Platform",
+      "background": null,
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    },
+    "win": {
+      "icon": "electron/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "linux": {
+      "icon": "electron/icons/icon.png",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "synopsis": "SMETA Compliance Documentation Platform",
+      "description": "Professional compliance documentation management for SMETA audits"
+    }
   },
   "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
     "npm-run-all": "^4.1.5"
   },
   "engines": {

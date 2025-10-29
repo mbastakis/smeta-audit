@@ -35,3 +35,12 @@ export function getFileIconColor(fileType: string): string {
   if (fileType.includes('image') || fileType.includes('jpeg') || fileType.includes('png')) return '#7b1fa2'; // Purple
   return '#616161'; // Default gray
 }
+
+/**
+ * Default export object with all formatters
+ */
+export const formatters = {
+  formatFileSize,
+  formatDate,
+  getFileIconColor,
+};

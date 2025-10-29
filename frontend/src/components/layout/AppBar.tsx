@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   AppBar as MuiAppBar,
   Toolbar,
-  Typography,
   TextField,
   Button,
   Box,
@@ -38,14 +37,39 @@ export const AppBar: React.FC<AppBarProps> = ({ onUploadClick }) => {
     }
   };
 
+  const handleHomeClick = () => {
+    navigate('/');
+  };
+
   return (
     <MuiAppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 0, mr: 4 }}>
-          SMETA Platform
-        </Typography>
+      <Toolbar sx={{ justifyContent: 'center', gap: 3 }}>
+        <Box
+          onClick={handleHomeClick}
+          sx={{ 
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'space-between',
+            backgroundColor: 'white',
+            borderRadius: '4px',
+            '&:hover': {
+              opacity: 0.9,
+            },
+          }}
+        >
+          <img 
+            src="/assets/company-logo.png" 
+            alt="People Hub HRIS - Respect • Safety • Growth" 
+            style={{ 
+              height: '80px',
+              width: 'auto',
+              objectFit: 'contain',
+              display: 'block'
+            }} 
+          />
+        </Box>
         
-        <Box sx={{ flexGrow: 1, maxWidth: 600 }}>
+        <Box sx={{ maxWidth: 600, width: '100%' }}>
           <TextField
             fullWidth
             placeholder="Search documents..."
@@ -101,7 +125,6 @@ export const AppBar: React.FC<AppBarProps> = ({ onUploadClick }) => {
           color="secondary"
           startIcon={<UploadFileIcon />}
           onClick={onUploadClick}
-          sx={{ ml: 2 }}
         >
           Upload Document
         </Button>

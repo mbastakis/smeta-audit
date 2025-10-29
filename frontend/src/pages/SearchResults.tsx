@@ -17,12 +17,12 @@ import {
 import {
   ExpandMore as ExpandMoreIcon,
   Home as HomeIcon,
-  Description as DescriptionIcon,
   ArrowBack as ArrowBackIcon,
 } from '@mui/icons-material';
 import { documentService } from '../services/documentService';
 import type { Document } from '../types/document';
-import { formatDate, getFileIconColor } from '../utils/formatters';
+import { formatDate } from '../utils/formatters';
+import { getDisplayName, getDocumentIcon } from '../utils/documentDisplay';
 
 const PILLAR_NAMES: Record<string, string> = {
   'pillar-1': 'Pillar 1: Labour Standards',
@@ -199,16 +199,12 @@ export const SearchResults: React.FC = () => {
                     <CardActionArea onClick={() => handleDocumentClick(document)}>
                       <CardContent>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-                          <DescriptionIcon
-                            sx={{
-                              fontSize: 40,
-                              color: getFileIconColor(document.fileType),
-                              mr: 2,
-                            }}
-                          />
+                          <Box sx={{ mr: 2, fontSize: 40 }}>
+                            {getDocumentIcon(document)}
+                          </Box>
                           <Box sx={{ flexGrow: 1 }}>
                             <Typography variant="h6" component="div">
-                              {highlightMatch(document.originalFilename, searchQuery)}
+                              {highlightMatch(getDisplayName(document), searchQuery)}
                             </Typography>
                             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                               {PILLAR_NAMES[document.pillar]}

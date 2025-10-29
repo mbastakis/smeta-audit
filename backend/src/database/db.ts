@@ -97,6 +97,38 @@ export function initializeDatabase() {
   `);
 
   console.log('✓ CAPAs table created');
+
+  // Create kpi_items table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS kpi_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      category TEXT NOT NULL CHECK(category IN ('statistics', 'research', 'kpis', 'org-chart', 'business-plan')),
+      file_type TEXT NOT NULL CHECK(file_type IN ('pdf', 'xlsx', 'docx', 'jpg', 'png', 'html-package')),
+      upload_date TEXT NOT NULL DEFAULT (datetime('now')),
+      folder_path TEXT NOT NULL UNIQUE,
+      has_index_html BOOLEAN NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+  `);
+
+  // Create indexes for kpi_items
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_kpi_items_category ON kpi_items(category);
+    CREATE INDEX IF NOT EXISTS idx_kpi_items_type ON kpi_items(file_type);
+  `);
+
+  // Create trigger for kpi_items updated_at
+  db.exec(`
+    CREATE TRIGGER IF NOT EXISTS update_kpi_items_timestamp 
+    AFTER UPDATE ON kpi_items
+    BEGIN
+      UPDATE kpi_items SET updated_at = datetime('now') WHERE id = NEW.id;
+    END;
+  `);
+
+  console.log('✓ KPI items table created');
   console.log('✓ Database initialization complete');
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -10,6 +10,8 @@ import {
   CardActionArea,
   Badge,
   Skeleton,
+  Alert,
+  Button,
 } from '@mui/material';
 import WorkIcon from '@mui/icons-material/Work';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
@@ -17,7 +19,9 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import NatureIcon from '@mui/icons-material/Nature';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { useDocumentCounts } from '../hooks/useDocumentCounts';
+import { useNotification } from '../contexts/NotificationContext';
 
 interface DashboardCard {
   id: string;
@@ -37,7 +41,15 @@ const dashboardCards: DashboardCard[] = [
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { counts, loading, error } = useDocumentCounts();
+  const { counts, loading, error, refetch } = useDocumentCounts();
+  const { showError } = useNotification();
+
+  // Show notification on error
+  useEffect(() => {
+    if (error) {
+      showError('Failed to load document counts. Please try again.');
+    }
+  }, [error, showError]);
 
   const handleCardClick = (route: string) => {
     navigate(route);
@@ -46,6 +58,10 @@ export const Dashboard: React.FC = () => {
   const getCardCount = (cardId: string): number => {
     if (!counts || !counts[cardId]) return 0;
     return counts[cardId].total || 0;
+  };
+
+  const handleRetry = () => {
+    refetch();
   };
 
   return (
@@ -70,13 +86,24 @@ export const Dashboard: React.FC = () => {
           </Typography>
         </Box>
 
-        {/* Error State */}
+        {/* Error State with Retry */}
         {error && (
-          <Box sx={{ mb: 4, p: 2, bgcolor: 'error.light', color: 'error.contrastText', borderRadius: 1 }}>
-            <Typography variant="body1">
-              Error loading document counts: {error}
-            </Typography>
-          </Box>
+          <Alert 
+            severity="error" 
+            sx={{ mb: 4 }}
+            action={
+              <Button 
+                color="inherit" 
+                size="small" 
+                onClick={handleRetry}
+                startIcon={<RefreshIcon />}
+              >
+                Retry
+              </Button>
+            }
+          >
+            Error loading document counts: {error}
+          </Alert>
         )}
 
         {/* Navigation Cards Grid */}

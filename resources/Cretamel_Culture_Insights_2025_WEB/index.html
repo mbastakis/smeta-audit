@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cretamel® — Εργασιακό Στυλ & Συμπεριφορές 2025 · Web Presentation</title>
+  <meta name="description" content="Culture & Behaviour Insights Report — SMETA Pillar 1 Alignment & Employee Engagement Findings">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+:root{
+  --red:#B31217;
+  --grey-1:#f6f7f8;
+  --grey-2:#eceeef;
+  --text:#111;
+  --muted:#666;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Noto Sans", "Roboto", system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.header{
+  position:sticky; top:0; z-index:10;
+  background:#fff; border-bottom:1px solid var(--grey-2);
+}
+.header-inner{
+  max-width:1200px; margin:0 auto;
+  display:flex; align-items:center; gap:16px;
+  padding:10px 16px;
+}
+.header img{height:36px}
+.title-wrap{display:flex; flex-direction:column}
+.title{font-weight:700; line-height:1.1}
+.subtitle{font-size:14px; color:var(--muted)}
+.tagline{font-size:12px; color:var(--muted)}
+.container{
+  max-width:1200px; margin:0 auto; padding:24px 16px 80px;
+}
+.deck{
+  background:var(--grey-1); border:1px solid var(--grey-2);
+  border-radius:16px; padding:24px;
+}
+.nav{
+  display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;
+}
+.nav button{
+  border:1px solid var(--grey-2); background:#fff; color:var(--text);
+  padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:600;
+}
+.nav button.active{border-color:var(--red); color:var(--red)}
+.slide{
+  display:none;
+  background:#fff; border:1px solid var(--grey-2);
+  border-radius:16px; padding:24px; min-height:420px;
+}
+.slide.active{display:block}
+.slide h2{margin:0 0 8px 0; font-size:24px}
+.hr{height:2px; background:linear-gradient(90deg,var(--red),transparent); margin:12px 0 20px}
+.grid-2{
+  display:grid; grid-template-columns:1fr 1fr; gap:20px;
+}
+.grid-3{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+}
+.card{
+  background:var(--grey-1); border:1px solid var(--grey-2);
+  border-radius:14px; padding:16px;
+}
+.kpi{
+  display:flex; align-items:center; gap:16px;
+  background:#fff; border:1px dashed var(--grey-2); border-radius:14px; padding:12px 16px;
+}
+.kpi .label{font-weight:700}
+.footer{
+  position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--grey-2);
+}
+.footer-inner{
+  max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;
+  padding:8px 16px; color:var(--muted); font-size:13px;
+}
+.btn{
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+  padding:10px 14px; border-radius:10px; border:1px solid var(--grey-2); background:#fff; font-weight:600;
+}
+.btn.primary{border-color:var(--red); color:#fff; background:var(--red)}
+.btn.ghost{background:#fff}
+.actions{display:flex; gap:8px}
+.badge{display:inline-block; border:1px solid var(--red); color:var(--red); border-radius:999px; padding:4px 10px; font-size:12px; font-weight:700}
+ul{margin:8px 0 0 18px}
+.table{
+  width:100%; border-collapse:collapse; font-size:14px;
+}
+.table th,.table td{
+  border-bottom:1px solid var(--grey-2); padding:10px 12px; text-align:left; vertical-align:top;
+}
+.small{font-size:12px; color:var(--muted)}
+.pies{display:grid; grid-template-columns:repeat(4,1fr); gap:18px}
+.pie-card{background:#fff; border:1px solid var(--grey-2); border-radius:12px; padding:12px; text-align:center}
+.pie-title{font-weight:700; font-size:14px; margin:6px 0}
+.pie-num{font-weight:800; font-size:22px; color:var(--red)}
+.note{font-size:13px; color:var(--muted)}
+.sep{height:1px; background:var(--grey-2); margin:12px 0}
+.code{font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#fafafa; border:1px solid var(--grey-2); border-radius:8px; padding:8px 10px; display:inline-block}
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <img src="assets/logo.png" alt="Cretamel logo" />
+      <div class="title-wrap">
+        <div class="title">Cretamel® — Εργασιακό Στυλ & Συμπεριφορές 2025</div>
+        <div class="subtitle">Culture & Behaviour Insights Report · Marvi Koukounaraki · September 2025</div>
+        <div class="tagline">Respect · Safety · Growth — <span class="small">SMETA Pillar 1 – Labour Standards</span></div>
+      </div>
+      <div style="margin-left:auto" class="actions">
+        <button id="print" class="btn ghost" title="Print / Save as PDF">📄 Download PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="deck">
+      <div class="nav">
+        <button class="active">1. Εξώφυλλο</button>
+        <button>2. Προφίλ</button>
+        <button>3. Άξονες</button>
+        <button>4. KPIs</button>
+        <button>5. Insight: Εξωστρέφεια</button>
+        <button>6. Insight: Πραγματισμός</button>
+        <button>7. Insight: Λογική</button>
+        <button>8. Insight: Δομή</button>
+        <button>9. Meta-Insights</button>
+        <button>10. Action Plan 2026</button>
+        <button>11. SMETA Mapping</button>
+        <button>12. Συμπέρασμα</button>
+      </div>
+
+      <!-- Slide 1 -->
+      <section class="slide active">
+        <h2>Εργασιακό Στυλ & Συμπεριφορές — 2025</h2>
+        <div class="hr"></div>
+        <div class="grid-2">
+          <div class="card">
+            <p><span class="badge">SMETA Pillar 1 — Labour Standards</span></p>
+            <p>Culture &amp; Behaviour Insights Report<br>
+            <strong>Marvi Koukounaraki — September 2025</strong></p>
+            <p class="small">Η παρουσίαση αυτή συνοψίζει τα ευρήματα της έρευνας εργασιακού στυλ και συνδέει την κουλτούρα με τις απαιτήσεις συμμόρφωσης SMETA.</p>
+          </div>
+          <div class="card">
+            <ul>
+              <li><strong>Σκοπός:</strong> Ανίχνευση προτύπων σκέψης, επικοινωνίας και λειτουργίας</li>
+              <li><strong>Δείγμα:</strong> Διοικητικά/Πωλήσεις/Αποθήκη/Logistics · Παραγωγή/Τεχνική Δ/νση/Συντήρηση · Συσκευασία &amp; Ποιοτικός Έλεγχος</li>
+              <li><strong>Μεθοδολογία:</strong> 24 ερωτήσεις ΝΑΙ/ΟΧΙ σε 4 άξονες</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide">
+        <h2>Σκοπός &amp; Πλαίσιο Έρευνας</h2>
+        <div class="hr"></div>
+        <div class="grid-2">
+          <div class="card">
+            <p><strong>Σκοπός:</strong> Διερεύνηση τρόπου σκέψης, επικοινωνίας και καθημερινής λειτουργίας, με στόχο εντοπισμό δυνατών στοιχείων &amp; σημείων βελτίωσης.</p>
+            <p><strong>Περίοδος:</strong> Σεπτέμβριος 2025</p>
+            <p><strong>Δείγμα:</strong></p>
+            <ul>
+              <li>Διοικητικά / Πωλήσεις / Αποθήκη / Logistics</li>
+              <li>Παραγωγή / Τεχνική Δ/νση / Συντήρηση</li>
+              <li>Συσκευασία &amp; Ποιοτικός Έλεγχος</li>
+            </ul>
+          </div>
+          <div class="card">
+            <p><strong>Μεθοδολογία:</strong> 24 ερωτήσεις ΝΑΙ/ΟΧΙ σε 4 άξονες:</p>
+            <ul>
+              <li>Εξωστρέφεια – Εσωστρέφεια</li>
+              <li>Πραγματισμός – Διαισθητικότητα</li>
+              <li>Λογική – Συναισθηματισμός</li>
+              <li>Δομή – Ευελιξία</li>
+            </ul>
+            <p class="small">Στόχος: Εντοπισμός συμπεριφορικών προτύπων που επηρεάζουν Engagement &amp; συμμόρφωση Pillar 1.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide">
+        <h2>Οι 4 Άξονες Εργασιακού Στυλ</h2>
+        <div class="hr"></div>
+        <div class="grid-2">
+          <div class="card">
+            <p><strong>Style Compass</strong></p>
+            <div class="sep"></div>
+            <p class="small">Οπτικός προσανατολισμός τεταρτημορίων (Εξωστρέφεια/Εσωστρέφεια · Πραγματισμός/Διαισθητικότητα · Λογική/Συναισθηματισμός · Δομή/Ευελιξία).</p>
+          </div>
+          <div class="card">
+            <ul>
+              <li><strong>Εξωστρέφεια – Εσωστρέφεια:</strong> επικοινωνία & δημόσιος διάλογος</li>
+              <li><strong>Πραγματισμός – Διαισθητικότητα:</strong> σταθερότητα vs καινοτομία</li>
+              <li><strong>Λογική – Συναισθηματισμός:</strong> δίκαιες σχέσεις & ενσυναίσθηση</li>
+              <li><strong>Δομή – Ευελιξία:</strong> ιεραρχία, διαδικασίες & αυτονομία</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4 -->
+      <section class="slide">
+        <h2>KPI Overview</h2>
+        <div class="hr"></div>
+        <div class="pies">
+          <div class="pie-card">
+            <div id="pie1"></div>
+            <div class="pie-title">Εξωστρέφεια–Εσωστρέφεια</div>
+            <div class="pie-num">70%</div>
+          </div>
+          <div class="pie-card">
+            <div id="pie2"></div>
+            <div class="pie-title">Πραγματισμός–Διαισθητικότητα</div>
+            <div class="pie-num">70%</div>
+          </div>
+          <div class="pie-card">
+            <div id="pie3"></div>
+            <div class="pie-title">Λογική–Συναισθηματισμός</div>
+            <div class="pie-num">89%</div>
+          </div>
+          <div class="pie-card">
+            <div id="pie4"></div>
+            <div class="pie-title">Δομή–Ευελιξία</div>
+            <div class="pie-num">86%</div>
+          </div>
+        </div>
+        <p class="note">Flat design · λευκό/γκρι/κόκκινο — αντικαθιστά άμεσα τις πίτες με νέες τιμές αν χρειαστεί.</p>
+      </section>
+
+      <!-- Slide 5 -->
+      <section class="slide">
+        <h2>Insight #1 — Εξωστρέφεια</h2>
+        <div class="hr"></div>
+        <div class="grid-2">
+          <div class="card">
+            <p>«Σταθερή επικοινωνία, χαμηλή δημόσια έκφραση»</p>
+            <ul>
+              <li>Συνεργατικοί, αλλά διστακτικοί στην έκθεση</li>
+              <li>Περιορισμένες πρωτοβουλίες — ανάγκη για ασφαλές περιβάλλον διαλόγου</li>
+            </ul>
+          </div>
+          <div class="card">
+            <p><strong>SMETA:</strong> Pillar 1 – Freedom of Association (BC1)</p>
+            <p><strong>Δράσεις:</strong> Open Dialogue Days · MyVoice Portal</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6 -->
+      <section class="slide">
+        <h2>Insight #2 — Πραγματισμός</h2>
+        <div class="hr"></div>
+        <div class="grid-2">
+          <div class="card">
+            <p>«Αξιοπιστία, αλλά έλλειψη καινοτομίας»</p>
+            <ul>
+              <li>Επιλογή αποδεδειγμένων μεθόδων</li>
+              <li>Χαμηλή δημιουργική συμμετοχή</li>
+            </ul>
+          </div>
+          <div class="card">
+            <p><strong>SMETA:</strong> Pillar 4 – Business Ethics (BC8 – Continuous Improvement)</p>
+            <p><strong>Δράσεις:</strong> Idea Challenge Week · Cretamel LearnHub</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7 -->
+      <section class="slide">
+        <h2>Insight #3 — Λογική</h2>
+        <div class="hr"></div>
+        <div class="grid-2">
+          <div class="card">
+            <p>«Δικαιοσύνη, ωριμότητα και σεβασμός»</p>
+            <ul>
+              <li>Υψηλή συνεργατικότητα & αίσθημα δικαίου</li>
+              <li>Ήρεμο περιβάλλον, χωρίς συγκρούσεις</li>
+            </ul>
+          </div>
+          <div class="card">
+            <p><strong>SMETA:</strong> Pillar 1 – Labour Standards (BC6 – Non-Discrimination)</p>
+            <p><strong>Δράσεις:</strong> Lead with Respect · Coaching Skills Training</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8 -->
+      <section class="slide">
+        <h2>Insight #4 — Δομή</h2>
+        <div class="hr"></div>
+        <div class="grid-2">
+          <div class="card">
+            <p>«Ανάγκη για πλαίσιο και καθοδήγηση»</p>
+            <ul>
+              <li>Κανόνες, σταθερότητα και καθαρή ιεραρχία</li>
+              <li>Ενισχύει συγκεντρωτισμό αλλά προσφέρει ασφάλεια</li>
+            </ul>
+          </div>
+          <div class="card">
+            <p><strong>SMETA:</strong> Pillar 4 – Business Ethics (BC9 – Management Systems)</p>
+            <p><strong>Δράσεις:</strong> Job Role Clarity Plan · Cross-Functional Task Forces</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 9 -->
+      <section class="slide">
+        <h2>Meta-Insights</h2>
+        <div class="hr"></div>
+        <table class="table">
+          <thead>
+            <tr><th>Συμπεριφορική Τάση</th><th>Ερμηνεία</th><th>Συνέπεια για SMETA</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Συγκρατημένη Εξωστρέφεια</td><td>Περιορισμένο feedback</td><td>Ενίσχυση διαλόγου (Pillar 1)</td></tr>
+            <tr><td>Πραγματισμός &gt; Δημιουργικότητα</td><td>Σταθερότητα &gt; Καινοτομία</td><td>Εκπαίδευση &amp; Engagement (Pillar 4)</td></tr>
+            <tr><td>Υψηλή Λογική</td><td>Ηθική και σεβασμός</td><td>Θετική συμμόρφωση (BC6)</td></tr>
+            <tr><td>Ισχυρή Δομή</td><td>Προβλεψιμότητα &gt; Αυτονομία</td><td>Ενίσχυση συμμετοχής (BC9)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Slide 10 -->
+      <section class="slide">
+        <h2>Action Plan 2026 — From Stability to Engagement</h2>
+        <div class="hr"></div>
+        <table class="table">
+          <thead>
+            <tr><th>Στόχος</th><th>Ενέργεια</th><th>Καλές Πρακτικές</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ενίσχυση Εμπιστοσύνης &amp; Διαλόγου</td><td>Τριμηνιαίες “Open Dialogue Days”</td><td>Coca-Cola HBC</td></tr>
+            <tr><td>Ενεργοποίηση Πρωτοβουλιών</td><td>“Idea Challenge Week” με αναγνώριση</td><td>Unilever / Barilla</td></tr>
+            <tr><td>Ανάπτυξη Δεξιοτήτων</td><td>Micro-learning modules “Cretamel LearnHub”</td><td>Internal Platform</td></tr>
+            <tr><td>Coaching Ηγεσίας</td><td>Εκπαίδευση “Lead with Respect”</td><td>Nestlé</td></tr>
+            <tr><td>Ευελιξία &amp; Ομαδικότητα</td><td>Cross-functional Task Forces</td><td>IKEA / Mondelez</td></tr>
+            <tr><td>Κουλτούρα Αναγνώρισης</td><td>Ετήσιο “Cretamel Day”</td><td>Danone / Ferrero</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Slide 11 -->
+      <section class="slide">
+        <h2>Σύνδεση με SMETA Pillars</h2>
+        <div class="hr"></div>
+        <table class="table">
+          <thead><tr><th>#</th><th>Ενότητα / Insight</th><th>SMETA Pillar</th><th>Επεξήγηση Ευθυγράμμισης</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Εξωστρέφεια – Εσωστρέφεια (68%)</td><td>Pillar 1 – Labour Standards</td><td>WR 1.3 &amp; WR 1.5: σεβασμός αλλά ανάγκη ενίσχυσης ανοιχτής συμμετοχής</td></tr>
+            <tr><td>2</td><td>Πραγματισμός – Διαισθητικότητα (73%)</td><td>Pillar 1 + Pillar 4</td><td>Δίκαιη, σταθερή εργασία &amp; κουλτούρα διαφάνειας/βελτίωσης</td></tr>
+            <tr><td>3</td><td>Λογική – Συναισθηματισμός (88%)</td><td>Pillar 1</td><td>WR 1.9: ανάγκη για μηχανισμό ανοιχτής ανατροφοδότησης</td></tr>
+            <tr><td>4</td><td>Δομή – Ευελιξία (85%)</td><td>Pillar 1</td><td>WR 1.2 &amp; WR 1.7: θετική οργάνωση, συγκεντρωτική διοίκηση</td></tr>
+            <tr><td>5</td><td>Έλλειψη ενθουσιασμού &amp; πρωτοβουλιών</td><td>Pillar 1</td><td>Worker Involvement &amp; Motivation</td></tr>
+            <tr><td>6</td><td>Απόσταση από Διοίκηση</td><td>Pillar 1</td><td>WR 1.5 &amp; WR 1.6: ενίσχυση καναλιών διαβούλευσης</td></tr>
+            <tr><td>7</td><td>Συγκεντρωτισμός</td><td>Pillar 1</td><td>WR 1.2 &amp; Training: empowerment</td></tr>
+            <tr><td>8</td><td>Ωριμότητα &amp; Σταθερότητα</td><td>Pillar 4</td><td>Ευθυγράμμιση με ETI Base Code</td></tr>
+            <tr><td>9</td><td>Top 5 Employee Needs</td><td>Pillar 1</td><td>WR 1.4 / 1.5 / 1.9</td></tr>
+            <tr><td>10</td><td>Action Plan 2026</td><td>Pillar 1 + 4</td><td>Evidence συνεχούς βελτίωσης</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Slide 12 -->
+      <section class="slide">
+        <h2>Κλείσιμο / Συμπέρασμα</h2>
+        <div class="hr"></div>
+        <div class="card">
+          <p><strong>Συνολική εικόνα:</strong> ώριμη, σταθερή και συνεργατική κουλτούρα με υψηλή επαγγελματική ηθική και χαμηλή εξωστρέφεια. Οι εργαζόμενοι ζητούν περισσότερη φωνή, εμπιστοσύνη και προσωπική ανάπτυξη.</p>
+          <p><em>Το 2026 επικεντρώνεται στη μετάβαση “From Stability to Engagement”.</em></p>
+          <p class="small">Footer: SMETA Pillar 1 – Labour Standards · Employee Voice &amp; Culture Alignment</p>
+        </div>
+      </section>
+
+      <div style="display:flex; justify-content:space-between; margin-top:16px">
+        <button id="prev" class="btn">⬅️ Προηγούμενο</button>
+        <button id="next" class="btn primary">Επόμενο ➡️</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>Respect · Safety · Growth</div>
+      <div class="small">© 2025 Cretamel® · Web Presentation</div>
+    </div>
+  </footer>
+
+  <script>
+  
+const slides = Array.from(document.querySelectorAll('.slide'));
+const navBtns = Array.from(document.querySelectorAll('.nav button'));
+let idx = 0;
+
+function show(i){
+  idx = (i+slides.length)%slides.length;
+  slides.forEach((s,k)=>s.classList.toggle('active', k===idx));
+  navBtns.forEach((b,k)=>b.classList.toggle('active', k===idx));
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+document.getElementById('prev').addEventListener('click', ()=>show(idx-1));
+document.getElementById('next').addEventListener('click', ()=>show(idx+1));
+navBtns.forEach((b,k)=>b.addEventListener('click', ()=>show(k)));
+
+document.getElementById('print').addEventListener('click', ()=>window.print());
+
+// Draw donut pies
+function donut(el, percent, label){
+  const size = 120, stroke = 16;
+  const r = (size-stroke)/2;
+  const c = Math.PI * 2 * r;
+  const off = c * (1 - percent/100);
+  el.innerHTML = `
+  <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-label="${label}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#eceeef" stroke-width="${stroke}" />
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#B31217" stroke-width="${stroke}"
+      stroke-linecap="round" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}"
+      transform="rotate(-90 ${size/2} ${size/2})"/>
+  </svg>`;
+}
+
+const pies = [
+  {id:'pie1', p:70, t:'Εξωστρέφεια–Εσωστρέφεια'},
+  {id:'pie2', p:70, t:'Πραγματισμός–Διαισθητικότητα'},
+  {id:'pie3', p:89, t:'Λογική–Συναισθηματισμός'},
+  {id:'pie4', p:86, t:'Δομή–Ευελιξία'},
+];
+pies.forEach(x=>donut(document.getElementById(x.id), x.p, x.t));
+
+show(0);
+
+  </script>
+</body>
+</html>

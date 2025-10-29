@@ -20,10 +20,20 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import DownloadIcon from '@mui/icons-material/Download';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 import type { Document as DocumentType } from '../../types/document';
 
-// Configure PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// Configure PDF.js worker - use backend-served worker file for Electron compatibility
+// Extract base URL without /api suffix for static file serving
+const getBaseUrl = () => {
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+  return apiUrl.replace(/\/api$/, '');
+};
+
+const BASE_URL = getBaseUrl();
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+pdfjs.GlobalWorkerOptions.workerSrc = `${BASE_URL}/pdfjs/pdf.worker.min.mjs`;
 
 interface DocumentViewerModalProps {
   open: boolean;
@@ -43,8 +53,8 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const isPDF = document?.fileType === 'application/pdf';
-  const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-  const documentUrl = document ? `${apiBaseUrl}/documents/${document.id}/download` : '';
+  const isImage = document?.fileType?.startsWith('image/');
+  const documentUrl = document ? `${API_URL}/documents/${document.id}/download` : '';
 
   const handleDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -125,6 +135,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
       }}
     >
       <DialogTitle
+        component="div"
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -239,6 +250,51 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 />
               </Document>
             )}
+          </DialogContent>
+        </>
+      ) : isImage ? (
+        <>
+          <AppBar position="static" color="default" elevation={0}>
+            <Toolbar variant="dense" sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} aria-label="zoom out">
+                <ZoomOutIcon />
+              </IconButton>
+              <IconButton onClick={handleZoomIn} disabled={scale >= 3.0} aria-label="zoom in">
+                <ZoomInIcon />
+              </IconButton>
+              <Button size="small" onClick={handleFitToWidth} sx={{ ml: 1 }}>
+                Fit to Width
+              </Button>
+              <IconButton onClick={handleDownload} sx={{ ml: 1 }} aria-label="download">
+                <DownloadIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+
+          <DialogContent
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: '#f5f5f5',
+              p: 2,
+              overflow: 'auto',
+            }}
+          >
+            <Box
+              component="img"
+              src={documentUrl}
+              alt={document.originalFilename}
+              sx={{
+                maxWidth: '100%',
+                maxHeight: 'calc(90vh - 150px)',
+                objectFit: 'contain',
+                transform: `scale(${scale})`,
+                transformOrigin: 'center center',
+                transition: 'transform 0.2s ease-in-out',
+              }}
+            />
           </DialogContent>
         </>
       ) : (

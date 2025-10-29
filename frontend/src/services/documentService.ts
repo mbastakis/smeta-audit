@@ -29,6 +29,7 @@ export const documentService = {
     file: File,
     pillar: string,
     category?: string,
+    displayName?: string,
     onProgress?: (percentage: number) => void
   ): Promise<Document> => {
     const formData = new FormData();
@@ -36,6 +37,9 @@ export const documentService = {
     formData.append('pillar', pillar);
     if (category) {
       formData.append('category', category);
+    }
+    if (displayName) {
+      formData.append('displayName', displayName);
     }
 
     const response = await axios.post<Document>(`${API_BASE}/documents/upload`, formData, {

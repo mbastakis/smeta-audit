@@ -7,14 +7,15 @@ export class DocumentRepository {
    */
   insertDocument(doc: DocumentInsert): Document {
     const stmt = db.prepare(`
-      INSERT INTO documents (filename, original_filename, pillar, category, 
+      INSERT INTO documents (filename, original_filename, display_name, pillar, category, 
                             file_type, file_size, file_path)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `);
     
     const result = stmt.run(
       doc.filename,
       doc.originalFilename,
+      doc.displayName,
       doc.pillar,
       doc.category,
       doc.fileType,
@@ -35,6 +36,7 @@ export class DocumentRepository {
         id,
         filename,
         original_filename as originalFilename,
+        display_name as displayName,
         pillar,
         category,
         file_type as fileType,
@@ -63,6 +65,7 @@ export class DocumentRepository {
         id,
         filename,
         original_filename as originalFilename,
+        display_name as displayName,
         pillar,
         category,
         file_type as fileType,
@@ -85,6 +88,7 @@ export class DocumentRepository {
         id,
         filename,
         original_filename as originalFilename,
+        display_name as displayName,
         pillar,
         category,
         file_type as fileType,
@@ -108,6 +112,7 @@ export class DocumentRepository {
         id,
         filename,
         original_filename as originalFilename,
+        display_name as displayName,
         pillar,
         category,
         file_type as fileType,
@@ -178,16 +183,19 @@ export class DocumentRepository {
   search(searchTerm: string): Document[] {
     const searchPattern = `%${searchTerm}%`;
     
-    // Search with relevance scoring:
-    // 1 = exact original_filename match (case-insensitive)
-    // 2 = original_filename contains search term
-    // 3 = filename contains search term
-    // 4 = pillar or category contains search term
+    // Search with relevance scoring (updated to include display_name):
+    // 1 = exact display_name match (highest priority)
+    // 2 = display_name contains search term
+    // 3 = exact original_filename match
+    // 4 = original_filename contains search term
+    // 5 = filename contains search term
+    // 6 = pillar or category contains search term
     const stmt = db.prepare(`
       SELECT 
         id,
         filename,
         original_filename as originalFilename,
+        display_name as displayName,
         pillar,
         category,
         file_type as fileType,
@@ -195,15 +203,18 @@ export class DocumentRepository {
         upload_date as uploadDate,
         file_path as filePath,
         CASE
-          WHEN LOWER(original_filename) = LOWER(?) THEN 1
-          WHEN LOWER(original_filename) LIKE LOWER(?) THEN 2
-          WHEN LOWER(filename) LIKE LOWER(?) THEN 3
-          WHEN LOWER(pillar) LIKE LOWER(?) OR LOWER(category) LIKE LOWER(?) THEN 4
-          ELSE 5
+          WHEN display_name IS NOT NULL AND LOWER(display_name) = LOWER(?) THEN 1
+          WHEN display_name IS NOT NULL AND LOWER(display_name) LIKE LOWER(?) THEN 2
+          WHEN LOWER(original_filename) = LOWER(?) THEN 3
+          WHEN LOWER(original_filename) LIKE LOWER(?) THEN 4
+          WHEN LOWER(filename) LIKE LOWER(?) THEN 5
+          WHEN LOWER(pillar) LIKE LOWER(?) OR LOWER(category) LIKE LOWER(?) THEN 6
+          ELSE 7
         END as relevance
       FROM documents
       WHERE 
-        LOWER(original_filename) LIKE LOWER(?)
+        (display_name IS NOT NULL AND LOWER(display_name) LIKE LOWER(?))
+        OR LOWER(original_filename) LIKE LOWER(?)
         OR LOWER(filename) LIKE LOWER(?)
         OR LOWER(pillar) LIKE LOWER(?)
         OR LOWER(category) LIKE LOWER(?)
@@ -211,13 +222,16 @@ export class DocumentRepository {
       LIMIT 50
     `);
     
-    // Bind parameters: searchTerm, searchPattern (multiple times for different fields)
+    // Bind parameters
     const results = stmt.all(
-      searchTerm,           // For exact match
+      searchTerm,           // For exact display_name match
+      searchPattern,        // For display_name LIKE
+      searchTerm,           // For exact original_filename match
       searchPattern,        // For original_filename LIKE
       searchPattern,        // For filename LIKE
       searchPattern,        // For pillar LIKE
       searchPattern,        // For category LIKE
+      searchPattern,        // WHERE display_name LIKE
       searchPattern,        // WHERE original_filename LIKE
       searchPattern,        // WHERE filename LIKE
       searchPattern,        // WHERE pillar LIKE

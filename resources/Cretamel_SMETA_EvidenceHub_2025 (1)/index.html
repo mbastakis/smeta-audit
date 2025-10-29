@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SMETA Evidence Hub 2025 — Cretamel®</title>
+  <link rel="icon" href="assets/logo.png">
+  <style>
+    
+:root{ --red:#A6261E; --beige:#F8F4EF; --gray:#6C7A89; --border:#e9e9e9; --bg:#fdfbf7; --card:#fff; --shadow:0 10px 25px rgba(0,0,0,.07); }
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Noto Sans',sans-serif;background:var(--bg);color:#1d1f21}
+/* soft additional items + footer */
+li.additional{font-size:.9em;color:#777;font-weight:400;border:1px dashed #e9e9e9;background:#fcfcfc;border-radius:8px;margin:4px 0;padding:6px 10px;transition:all .2s ease}
+li.additional:hover{background:#f7f7f7;color:#555}
+.card.additional a{font-size:.92em;color:#777 !important;font-weight:400}
+.card.additional h3{font-weight:500;color:#666}
+.footer{margin-top:40px;padding-top:12px;font-size:13px;color:#999;text-align:center;border-top:1px solid #eee}
+.logo-header{display:block;margin:0 auto 8px;height:48px}
+input[type=search]{padding:10px 12px;border:1px solid #ccc;border-radius:10px;min-width:280px}
+@media print{ .breadcrumbs,.tools,.back,.sidebar,.topbar{display:none !important} body{margin:0;padding:24px} .card{box-shadow:none !important;border-color:#ccc} }
+
+    .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+    .sidebar{position:sticky;top:0;height:100vh;background:var(--beige);border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:16px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{height:44px}
+    .brand .name{font-weight:800;color:var(--red)}
+    .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;text-decoration:none;color:#111;border:1px solid transparent}
+    .nav a:hover{background:#fff;border-color:var(--border);box-shadow:var(--shadow)}
+    .content{padding:28px 32px}
+    h1{margin:4px 0 12px;font-size:28px;color:var(--red)}
+    .tagline{color:var(--gray);font-weight:600}
+    section{margin:28px 0;padding-bottom:12px;border-bottom:1px dashed #eee}
+    h2{margin:0 0 12px;color:#111}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:16px;transition:transform .15s ease, box-shadow .2s ease}
+    .card:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.1)}
+    .card h3{margin:0 0 8px}
+    .card p{margin:0 0 10px;color:var(--gray)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:12px;background:var(--red);color:#fff;text-decoration:none;font-weight:700}
+    .btn.secondary{background:#fff;color:var(--red);border:1px solid var(--red)}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+    .tip{font-size:12px;color:var(--gray)}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .dl{background:#fff;color:var(--red);border:1px solid var(--red)}
+    .backtop{position:fixed;right:20px;bottom:20px;padding:10px 12px;border-radius:999px;background:var(--red);color:#fff;text-decoration:none;box-shadow:var(--shadow)}
+    @media (max-width: 960px){ .app{grid-template-columns:1fr} .sidebar{position:relative;height:auto} }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/logo.png" alt="Cretamel logo" onerror="this.style.display='none'">
+        <div><div class="name">Cretamel®</div><div class="tagline">SMETA Evidence Hub 2025</div></div>
+      </div>
+      <nav class="nav">
+        <a href="#overview">📌 Επισκόπηση</a>
+        <a href="#pillar1">⚖️ Pillar 1 · Labour</a>
+        <a href="#pillar2">🦺 Pillar 2 · H&amp;S</a>
+        <a href="#pillar3">🌿 Pillar 3 · Environment</a>
+        <a href="#pillar4">🤝 Pillar 4 · Ethics</a>
+        <a href="#training">🎓 Training</a>
+        <a href="#kpis">📊 KPIs</a>
+        <a href="#capa">🛠️ CAPA</a>
+        <a href="#contact">☎️ Επικοινωνία</a>
+      </nav>
+      <div class="tip">🔗 Τα links ανοίγουν σε <b>νέα καρτέλα</b> για να επιστρέφεις εύκολα στο Hub.</div>
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <div>
+          <img src="assets/logo.png" alt="Cretamel logo" class="logo-header" onerror="this.style.display='none'">
+          <h1>SMETA Evidence Hub 2025 — Cretamel®</h1>
+          <div class="tagline">Respect · Safety · Growth</div>
+        </div>
+        <div class="toolbar">
+          <label class="tip"><input type="checkbox" id="sameTab"> Άνοιγμα αρχείων στην ίδια καρτέλα</label>
+        </div>
+      </div>
+
+      <div class="toolbar" style="margin:8px 0 0">
+        <input id="globalQ" type="search" placeholder="Αναζήτηση σε Pillars & ενότητες..." style="min-width:320px">
+        <span class="tip">Π.χ. “Environment”, “Policies”, “CAPA”</span>
+      </div>
+      <script>
+        (function(){{
+          const q = document.getElementById('globalQ');
+          const sections = Array.from(document.querySelectorAll('main section'));
+          function filter(){{
+            const v = q.value.trim().toLowerCase();
+            sections.forEach(sec=>{{
+              if(!sec.id || sec.id==='overview' || sec.id==='training' || sec.id==='kpis' || sec.id==='capa' || sec.id==='contact') return;
+              const title = (sec.querySelector('h2')?.textContent || '').toLowerCase();
+              const cards = Array.from(sec.querySelectorAll('.card'));
+              let any=false;
+              cards.forEach(card=>{{
+                const text = ((card.querySelector('h3')?.textContent || '') + ' ' + (card.querySelector('p')?.textContent || '')).toLowerCase();
+                const ok = (title+text).includes(v);
+                card.style.display = v==='' || ok ? '' : 'none';
+                any = any || ok;
+              }});
+              sec.style.display = v==='' || any ? '' : 'none';
+            }});
+          }}
+          q.addEventListener('input', filter);
+        }} )();
+      </script>
+
+      <section id="overview">
+        <h2>Επισκόπηση Επιθεώρησης SMETA</h2>
+        <p>• Τεκμηρίωση: Πολιτικές, Διαδικασίες, Φόρμες, KPIs, Evidence</p>
+      </section>
+
+      
+      <section id="pillar1">
+        <h2>Pillar 1 — Labour Standards</h2>
+        <div class="grid">
+          <div class="card"><h3>Policies</h3><p>Κεντρική λίστα πολιτικών</p><div class="toolbar"><a class="btn link" href="Pillar1_Labour/Policies_Index.html" target="_blank">Άνοιγμα ➜ Policies_Index</a></div></div>
+          <div class="card"><h3>Procedures</h3><p>Διαδικασίες & ροές</p><div class="toolbar"><a class="btn link" href="Pillar1_Labour/Procedures_Index.html" target="_blank">Άνοιγμα ➜ Procedures_Index</a></div></div>
+          <div class="card"><h3>Forms</h3><p>Έντυπα/Υποδείγματα</p><div class="toolbar"><a class="btn link" href="Pillar1_Labour/Forms_Index.html" target="_blank">Άνοιγμα ➜ Forms_Index</a></div></div>
+          <div class="card"><h3>Evidence</h3><p>Φωτο, Λίστες, Audits, Logs</p><div class="toolbar"><a class="btn link" href="Pillar1_Labour/Evidence_Index.html" target="_blank">Άνοιγμα ➜ Evidence_Index</a></div></div>
+        </div>
+      </section>
+
+      <section id="pillar2">
+        <h2>Pillar 2 — Health & Safety</h2>
+        <div class="grid">
+          <div class="card"><h3>Policies</h3><p>Κεντρική λίστα πολιτικών</p><div class="toolbar"><a class="btn link" href="Pillar2_HealthSafety/Policies_Index.html" target="_blank">Άνοιγμα ➜ Policies_Index</a></div></div>
+          <div class="card"><h3>Procedures</h3><p>Διαδικασίες & ροές</p><div class="toolbar"><a class="btn link" href="Pillar2_HealthSafety/Procedures_Index.html" target="_blank">Άνοιγμα ➜ Procedures_Index</a></div></div>
+          <div class="card"><h3>Forms</h3><p>Έντυπα/Υποδείγματα</p><div class="toolbar"><a class="btn link" href="Pillar2_HealthSafety/Forms_Index.html" target="_blank">Άνοιγμα ➜ Forms_Index</a></div></div>
+          <div class="card"><h3>Evidence</h3><p>Φωτο, Λίστες, Audits, Logs</p><div class="toolbar"><a class="btn link" href="Pillar2_HealthSafety/Evidence_Index.html" target="_blank">Άνοιγμα ➜ Evidence_Index</a></div></div>
+        </div>
+      </section>
+
+      <section id="pillar3">
+        <h2>Pillar 3 — Environment</h2>
+        <div class="grid">
+          <div class="card"><h3>Policies</h3><p>Κεντρική λίστα πολιτικών</p><div class="toolbar"><a class="btn link" href="Pillar3_Environment/Policies_Index.html" target="_blank">Άνοιγμα ➜ Policies_Index</a></div></div>
+          <div class="card"><h3>Procedures</h3><p>Διαδικασίες & ροές</p><div class="toolbar"><a class="btn link" href="Pillar3_Environment/Procedures_Index.html" target="_blank">Άνοιγμα ➜ Procedures_Index</a></div></div>
+          <div class="card"><h3>Forms</h3><p>Έντυπα/Υποδείγματα</p><div class="toolbar"><a class="btn link" href="Pillar3_Environment/Forms_Index.html" target="_blank">Άνοιγμα ➜ Forms_Index</a></div></div>
+          <div class="card"><h3>Evidence</h3><p>Φωτο, Λίστες, Audits, Logs</p><div class="toolbar"><a class="btn link" href="Pillar3_Environment/Evidence_Index.html" target="_blank">Άνοιγμα ➜ Evidence_Index</a></div></div>
+        </div>
+      </section>
+
+      <section id="pillar4">
+        <h2>Pillar 4 — Business Ethics</h2>
+        <div class="grid">
+          <div class="card"><h3>Policies</h3><p>Κεντρική λίστα πολιτικών</p><div class="toolbar"><a class="btn link" href="Pillar4_BusinessEthics/Policies_Index.html" target="_blank">Άνοιγμα ➜ Policies_Index</a></div></div>
+          <div class="card"><h3>Procedures</h3><p>Διαδικασίες & ροές</p><div class="toolbar"><a class="btn link" href="Pillar4_BusinessEthics/Procedures_Index.html" target="_blank">Άνοιγμα ➜ Procedures_Index</a></div></div>
+          <div class="card"><h3>Forms</h3><p>Έντυπα/Υποδείγματα</p><div class="toolbar"><a class="btn link" href="Pillar4_BusinessEthics/Forms_Index.html" target="_blank">Άνοιγμα ➜ Forms_Index</a></div></div>
+          <div class="card"><h3>Evidence</h3><p>Φωτο, Λίστες, Audits, Logs</p><div class="toolbar"><a class="btn link" href="Pillar4_BusinessEthics/Evidence_Index.html" target="_blank">Άνοιγμα ➜ Evidence_Index</a></div></div>
+        </div>
+      </section>
+
+      <section id="training">
+        <h2>Training &amp; Awareness</h2>
+        <div class="grid"><div class="card">
+          <h3>Training Records</h3><p>Εκπαιδεύσεις ανά Πυλώνα &amp; Τμήμα</p>
+          <div class="toolbar"><a class="btn link" href="Training_Records_Index.xlsx" target="_blank">Άνοιγμα ➜ Training_Records_Index.xlsx</a></div>
+        </div></div>
+      </section>
+
+      <section id="kpis">
+        <h2>KPIs Dashboard</h2>
+        <div class="grid"><div class="card">
+          <h3>SMETA KPIs (Σύνοψη)</h3><p>Ενοποιημένα στατιστικά από όλους τους πυλώνες</p>
+          <div class="toolbar"><a class="btn link" href="SMETA_KPIs_Dashboard.xlsx" target="_blank">Άνοιγμα ➜ SMETA_KPIs_Dashboard.xlsx</a></div>
+        </div></div>
+      </section>
+
+      <section id="capa">
+        <h2>Continuous Improvement (CAPA)</h2>
+        <div class="grid"><div class="card">
+          <h3>CAPA Plan 2025</h3><p>Διορθωτικές ενέργειες, υπεύθυνοι, προθεσμίες, κατάσταση</p>
+          <div class="toolbar"><a class="btn link" href="CAPA_Plan_2025.xlsx" target="_blank">Άνοιγμα ➜ CAPA_Plan_2025.xlsx</a></div>
+        </div></div>
+      </section>
+
+      <section id="contact">
+        <h2>Επικοινωνία &amp; Σημειώσεις</h2>
+        <p>HR &amp; Site Representative: Μάρβη Κουκουναράκη</p>
+        <p>Quality Representative: Μελίνα Μπαλαχούτη</p>
+        <p class="tip">💡 Για να επιστρέψεις στο αρχικό μενού: τα αρχεία ανοίγουν σε νέα καρτέλα. Κλείσε την καρτέλα ή χρησιμοποίησε το sidebar.</p>
+      </section>
+
+      <footer class="footer">SMETA Evidence Hub 2025 · Cretamel® · Prepared by Marvi Koukounaraki · Last updated: 23 Oct 2025</footer>
+    </main>
+  </div>
+  <a class="backtop" href="#overview" title="Πίσω στην κορυφή">↑</a>
+  <script>
+    const toggle=document.getElementById('sameTab'); const links=()=>document.querySelectorAll('a.link');
+    function applyTarget(){{ links().forEach(a=>{{ if(toggle.checked){{ a.removeAttribute('target'); }} else {{ a.setAttribute('target','_blank'); }} }}); }}
+    toggle.addEventListener('change', applyTarget); applyTarget();
+  </script>
+</body>
+</html>
