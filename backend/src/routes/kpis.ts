@@ -219,8 +219,8 @@ router.get('/:id/download', (req: Request, res: Response) => {
       return res.status(404).json({ error: 'KPI folder not found' });
     }
 
-    // Find the file in the folder
-    const files = fs.readdirSync(folderPath);
+    // Find the file in the folder (skip hidden files like ._files)
+    const files = fs.readdirSync(folderPath).filter(f => !f.startsWith('.'));
     if (files.length === 0) {
       return res.status(404).json({ error: 'No files found' });
     }
