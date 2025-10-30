@@ -36,8 +36,10 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { kpiService } from '../services/kpiService';
 import { KPIItem, KPICategoryType } from '../types/kpi';
 import { KPIUploadModal } from '../components/kpi/KPIUploadModal';
+import { DocumentViewerModal } from '../components/documents/DocumentViewerModal';
 import { useNotification } from '../contexts/NotificationContext';
 import { formatters } from '../utils/formatters';
+import type { Document as DocumentType } from '../types/document';
 
 const categoryLabels: Record<KPICategoryType, string> = {
   statistics: 'Statistics',
@@ -68,6 +70,8 @@ export const KPICategoryView: React.FC = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<KPIItem | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<KPIItem | null>(null);
 
   useEffect(() => {
     if (category) {
@@ -98,7 +102,52 @@ export const KPICategoryView: React.FC = () => {
   };
 
   const handleViewItem = (item: KPIItem) => {
+    // For HTML packages, open in new window
+    if (item.hasIndexHtml) {
+      kpiService.openItem(item);
+      return;
+    }
+    
+    // For viewable files (PDF, images, DOCX), open in modal viewer
+    const viewableTypes = ['pdf', 'jpg', 'png', 'docx'];
+    if (viewableTypes.includes(item.fileType)) {
+      setSelectedItem(item);
+      setViewerOpen(true);
+      return;
+    }
+    
+    // For other files, trigger download
     kpiService.openItem(item);
+  };
+
+  const handleDownloadItem = (item: KPIItem) => {
+    window.open(kpiService.getDownloadUrl(item.id), '_blank');
+  };
+
+  // Convert KPIItem to Document format for viewer
+  const convertToDocument = (item: KPIItem | null): DocumentType | null => {
+    if (!item) return null;
+    
+    const mimeTypes: Record<string, string> = {
+      pdf: 'application/pdf',
+      docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      jpg: 'image/jpeg',
+      png: 'image/png',
+    };
+    
+    return {
+      id: item.id,
+      filename: `${item.title}.${item.fileType}`,
+      originalFilename: `${item.title}.${item.fileType}`,
+      displayName: item.title,
+      pillar: 'kpis',
+      category: null, // KPI categories don't match Document categories
+      fileType: mimeTypes[item.fileType] || 'application/octet-stream',
+      fileSize: 0, // Not available in KPIItem
+      uploadDate: item.uploadDate,
+      filePath: item.folderPath,
+    };
   };
 
   const handleDeleteClick = (item: KPIItem) => {
@@ -271,13 +320,24 @@ export const KPICategoryView: React.FC = () => {
                 </CardContent>
 
                 <CardActions sx={{ justifyContent: 'space-between', px: 2, pb: 2 }}>
-                  <Button
-                    size="small"
-                    startIcon={item.hasIndexHtml ? <VisibilityIcon /> : <DownloadIcon />}
-                    onClick={() => handleViewItem(item)}
-                  >
-                    {item.hasIndexHtml ? 'View' : 'Download'}
-                  </Button>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    {(item.hasIndexHtml || ['pdf', 'jpg', 'png', 'docx'].includes(item.fileType)) && (
+                      <Button
+                        size="small"
+                        startIcon={<VisibilityIcon />}
+                        onClick={() => handleViewItem(item)}
+                      >
+                        View
+                      </Button>
+                    )}
+                    <Button
+                      size="small"
+                      startIcon={<DownloadIcon />}
+                      onClick={() => handleDownloadItem(item)}
+                    >
+                      Download
+                    </Button>
+                  </Box>
                   <IconButton
                     size="small"
                     color="error"
@@ -326,6 +386,16 @@ export const KPICategoryView: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Document Viewer Modal */}
+      <DocumentViewerModal
+        open={viewerOpen}
+        document={convertToDocument(selectedItem)}
+        onClose={() => {
+          setViewerOpen(false);
+          setSelectedItem(null);
+        }}
+      />
     </Container>
   );
 };

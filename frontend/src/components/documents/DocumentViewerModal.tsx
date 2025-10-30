@@ -58,7 +58,13 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   const isPDF = document?.fileType === 'application/pdf';
   const isImage = document?.fileType?.startsWith('image/');
   const isDOCX = document?.fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-  const documentUrl = document ? `${API_URL}/documents/${document.id}/download` : '';
+  
+  // Determine the correct download URL based on pillar type
+  const documentUrl = document 
+    ? (document.pillar === 'kpis' 
+        ? `${API_URL}/kpis/${document.id}/download` 
+        : `${API_URL}/documents/${document.id}/download`)
+    : '';
 
   const handleDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
