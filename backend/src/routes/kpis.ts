@@ -205,11 +205,11 @@ router.get('/:id/download', (req: Request, res: Response) => {
     
     // If the stored path is absolute but doesn't exist, try to reconstruct it
     if (path.isAbsolute(folderPath) && !fs.existsSync(folderPath)) {
-      // Extract the relative path from uploads directory onwards
-      const uploadsIndex = folderPath.indexOf('/uploads/kpis/');
-      if (uploadsIndex !== -1) {
-        const relativePath = folderPath.substring(uploadsIndex + 1); // Remove leading slash
-        folderPath = path.join(process.cwd(), 'backend', relativePath);
+      // Extract the backend/uploads/kpis/ path onwards
+      const backendIndex = folderPath.indexOf('/backend/uploads/kpis/');
+      if (backendIndex !== -1) {
+        const relativePath = folderPath.substring(backendIndex + 1); // Remove leading slash
+        folderPath = path.join(process.cwd(), relativePath);
       }
     }
 
