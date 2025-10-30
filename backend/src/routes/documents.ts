@@ -123,8 +123,13 @@ router.get('/:id/download', async (req: Request, res: Response) => {
     // Get document metadata
     const document = documentRepository.findById(id);
 
-    // Build absolute file path
-    const filePath = path.join(process.cwd(), document.filePath);
+    // Build absolute file path - handle both old and new path formats
+    let filePath = path.join(process.cwd(), document.filePath);
+    
+    // If file doesn't exist with new format (backend/uploads), try old format (uploads)
+    if (!fs.existsSync(filePath) && !document.filePath.startsWith('backend/')) {
+      filePath = path.join(process.cwd(), 'backend', document.filePath);
+    }
 
     // Check if file exists
     if (!fs.existsSync(filePath)) {
