@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -23,6 +23,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import type { Document as DocumentType } from '../../types/document';
+import mammoth from 'mammoth';
 
 import { config } from '../../config';
 
@@ -52,9 +53,11 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   const [scale, setScale] = useState<number>(1.0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [docxHtml, setDocxHtml] = useState<string>('');
 
   const isPDF = document?.fileType === 'application/pdf';
   const isImage = document?.fileType?.startsWith('image/');
+  const isDOCX = document?.fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
   const documentUrl = document ? `${API_URL}/documents/${document.id}/download` : '';
 
   const handleDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
@@ -103,6 +106,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
     setScale(1.0);
     setLoading(true);
     setError(null);
+    setDocxHtml('');
     onClose();
   };
 
@@ -112,6 +116,44 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
       handleClose();
     }
   };
+
+  // Load and convert DOCX to HTML
+  useEffect(() => {
+    if (!open || !document || !isDOCX) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setDocxHtml('');
+
+    // Fetch the DOCX file as ArrayBuffer
+    fetch(documentUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch document');
+        }
+        return response.arrayBuffer();
+      })
+      .then((arrayBuffer) => {
+        // Convert DOCX to HTML using mammoth
+        return mammoth.convertToHtml({ arrayBuffer });
+      })
+      .then((result) => {
+        setDocxHtml(result.value);
+        setLoading(false);
+        
+        // Log any warnings from mammoth
+        if (result.messages.length > 0) {
+          console.log('Mammoth conversion warnings:', result.messages);
+        }
+      })
+      .catch((err) => {
+        console.error('Error loading DOCX:', err);
+        setError('Unable to load document');
+        setLoading(false);
+      });
+  }, [open, document, isDOCX, documentUrl]);
 
   if (!document) return null;
 
@@ -296,6 +338,91 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 transition: 'transform 0.2s ease-in-out',
               }}
             />
+          </DialogContent>
+        </>
+      ) : isDOCX ? (
+        <>
+          <AppBar position="static" color="default" elevation={0}>
+            <Toolbar variant="dense" sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} aria-label="zoom out">
+                <ZoomOutIcon />
+              </IconButton>
+              <IconButton onClick={handleZoomIn} disabled={scale >= 3.0} aria-label="zoom in">
+                <ZoomInIcon />
+              </IconButton>
+              <Button size="small" onClick={handleFitToWidth} sx={{ ml: 1 }}>
+                Reset Zoom
+              </Button>
+              <IconButton onClick={handleDownload} sx={{ ml: 1 }} aria-label="download">
+                <DownloadIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+
+          <DialogContent
+            sx={{
+              bgcolor: '#ffffff',
+              p: 4,
+              overflow: 'auto',
+            }}
+          >
+            {loading && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: 400,
+                }}
+              >
+                <CircularProgress />
+                <Typography variant="body2" sx={{ mt: 2 }}>
+                  Loading Word document...
+                </Typography>
+              </Box>
+            )}
+
+            {error ? (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: 400,
+                }}
+              >
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {error}
+                </Alert>
+                <Button variant="contained" onClick={handleDownload} startIcon={<DownloadIcon />}>
+                  Download Instead
+                </Button>
+              </Box>
+            ) : docxHtml ? (
+              <Box
+                sx={{
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top center',
+                  transition: 'transform 0.2s ease-in-out',
+                  maxWidth: '800px',
+                  margin: '0 auto',
+                  fontSize: '14px',
+                  lineHeight: 1.6,
+                  '& p': { marginBottom: '1em' },
+                  '& h1': { fontSize: '2em', fontWeight: 'bold', marginBottom: '0.5em' },
+                  '& h2': { fontSize: '1.5em', fontWeight: 'bold', marginBottom: '0.5em' },
+                  '& h3': { fontSize: '1.17em', fontWeight: 'bold', marginBottom: '0.5em' },
+                  '& ul, & ol': { marginLeft: '2em', marginBottom: '1em' },
+                  '& table': { borderCollapse: 'collapse', width: '100%', marginBottom: '1em' },
+                  '& td, & th': { border: '1px solid #ddd', padding: '8px' },
+                  '& th': { backgroundColor: '#f5f5f5', fontWeight: 'bold' },
+                  '& img': { maxWidth: '100%', height: 'auto' },
+                }}
+                dangerouslySetInnerHTML={{ __html: docxHtml }}
+              />
+            ) : null}
           </DialogContent>
         </>
       ) : (
