@@ -340,8 +340,8 @@ router.post('/upload', upload.single('file'), async (req: Request, res: Response
 
     // Build relative file path for database storage
     const relativePath = category
-      ? path.join('uploads', pillar, category, req.file.filename)
-      : path.join('uploads', pillar, req.file.filename);
+      ? path.join('backend/uploads', pillar, category, req.file.filename)
+      : path.join('backend/uploads', pillar, req.file.filename);
 
     // Insert document metadata into database
     const document = documentRepository.insertDocument({
