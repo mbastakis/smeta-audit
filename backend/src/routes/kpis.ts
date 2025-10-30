@@ -168,7 +168,7 @@ router.get('/:id/view', (req: Request, res: Response) => {
         const uploadsIndex = folderPath.indexOf('/uploads/kpis/');
         if (uploadsIndex !== -1) {
           const relativePath = folderPath.substring(uploadsIndex + 1);
-          folderPath = path.join(__dirname, '../../', relativePath);
+          folderPath = path.join(process.cwd(), 'backend', relativePath);
         }
       }
 
@@ -209,7 +209,7 @@ router.get('/:id/download', (req: Request, res: Response) => {
       const uploadsIndex = folderPath.indexOf('/uploads/kpis/');
       if (uploadsIndex !== -1) {
         const relativePath = folderPath.substring(uploadsIndex + 1); // Remove leading slash
-        folderPath = path.join(__dirname, '../../', relativePath);
+        folderPath = path.join(process.cwd(), 'backend', relativePath);
       }
     }
 
