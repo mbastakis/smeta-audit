@@ -18,7 +18,7 @@ data/*.db-shm
 data/*.db-wal
 
 # Uploads
-uploads/
+
 
 # Build outputs
 dist/
