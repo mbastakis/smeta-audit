@@ -160,8 +160,20 @@ router.get('/:id/view', (req: Request, res: Response) => {
     }
 
     if (item.hasIndexHtml) {
+      // Resolve folder path - handle both absolute and relative paths
+      let folderPath = item.folderPath;
+      
+      // If the stored path is absolute but doesn't exist, try to reconstruct it
+      if (path.isAbsolute(folderPath) && !fs.existsSync(folderPath)) {
+        const uploadsIndex = folderPath.indexOf('/uploads/kpis/');
+        if (uploadsIndex !== -1) {
+          const relativePath = folderPath.substring(uploadsIndex + 1);
+          folderPath = path.join(__dirname, '../../', relativePath);
+        }
+      }
+
       // Serve index.html with security headers
-      const indexPath = path.join(item.folderPath, 'index.html');
+      const indexPath = path.join(folderPath, 'index.html');
       res.sendFile(indexPath, {
         headers: {
           'X-Frame-Options': 'SAMEORIGIN',
@@ -188,13 +200,32 @@ router.get('/:id/download', (req: Request, res: Response) => {
       return res.status(404).json({ error: 'KPI item not found' });
     }
 
+    // Resolve folder path - handle both absolute and relative paths
+    let folderPath = item.folderPath;
+    
+    // If the stored path is absolute but doesn't exist, try to reconstruct it
+    if (path.isAbsolute(folderPath) && !fs.existsSync(folderPath)) {
+      // Extract the relative path from uploads directory onwards
+      const uploadsIndex = folderPath.indexOf('/uploads/kpis/');
+      if (uploadsIndex !== -1) {
+        const relativePath = folderPath.substring(uploadsIndex + 1); // Remove leading slash
+        folderPath = path.join(__dirname, '../../', relativePath);
+      }
+    }
+
+    // Check if folder exists
+    if (!fs.existsSync(folderPath)) {
+      console.error('Folder not found:', folderPath, 'Original:', item.folderPath);
+      return res.status(404).json({ error: 'KPI folder not found' });
+    }
+
     // Find the file in the folder
-    const files = fs.readdirSync(item.folderPath);
+    const files = fs.readdirSync(folderPath);
     if (files.length === 0) {
       return res.status(404).json({ error: 'No files found' });
     }
 
-    const filePath = path.join(item.folderPath, files[0]);
+    const filePath = path.join(folderPath, files[0]);
     res.download(filePath);
   } catch (error) {
     console.error('Error downloading KPI item:', error);
@@ -214,11 +245,23 @@ router.get('/:id/:filename', (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Not found' });
     }
 
+    // Resolve folder path - handle both absolute and relative paths
+    let folderPath = item.folderPath;
+    
+    // If the stored path is absolute but doesn't exist, try to reconstruct it
+    if (path.isAbsolute(folderPath) && !fs.existsSync(folderPath)) {
+      const uploadsIndex = folderPath.indexOf('/uploads/kpis/');
+      if (uploadsIndex !== -1) {
+        const relativePath = folderPath.substring(uploadsIndex + 1);
+        folderPath = path.join(__dirname, '../../', relativePath);
+      }
+    }
+
     // Serve the requested file from the folder
-    const filePath = path.join(item.folderPath, filename);
+    const filePath = path.join(folderPath, filename);
     
     // Security: prevent directory traversal
-    if (!filePath.startsWith(item.folderPath)) {
+    if (!filePath.startsWith(folderPath)) {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
